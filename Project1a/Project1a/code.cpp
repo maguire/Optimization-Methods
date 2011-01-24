@@ -1,19 +1,11 @@
 #include <iostream>
 #include <vector>
+
 #include "d_random.h"
 
+#include "code.h"
+
 using namespace std;
-
-class code
-{
-    public:
-        code(int n, int m);
-        int checkCorrect(vector<int> guess) const;
-        void print() const;
-
-    private:
-        vector<int> seq;
-};
 
 code::code(int n, int m)
 {
@@ -48,16 +40,4 @@ int code::checkCorrect(vector<int> guess) const
         }
     }
     return num_aligned++;
-}
-
-int main()
-{
-    for(int x = 0; x < 10; x++){
-        code c(5,10);
-        vector<int> v(4,5);
-        v.push_back(9);
-        c.checkCorrect(v);
-        c.print();
-
-    }
 }
