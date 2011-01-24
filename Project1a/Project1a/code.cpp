@@ -7,7 +7,7 @@
 
 using namespace std;
 
-code::code(int n, int m)
+Code::Code(int n, int m)
 {
     randomNumber genRandom;
 
@@ -18,7 +18,7 @@ code::code(int n, int m)
     }
 }
 
-void code::print() const
+void Code::print() const
 {
     for (int i = 0; i < seq.size(); i++)
         cout << seq[i] << ' ';
@@ -26,18 +26,16 @@ void code::print() const
     cout << '\n';
 }
 
-int code::checkCorrect(vector<int> guess) const
+int Code::checkCorrect(vector<int> guess) const
 {
-    int size = seq.size();
     int num_aligned = 0;
-    int num_correct = 0;
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < guess.size(); i++)
     {
         if(guess[i] == seq[i])
         {
             num_aligned++;
         }
     }
-    return num_aligned++;
+    return num_aligned;
 }
