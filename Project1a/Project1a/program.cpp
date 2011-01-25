@@ -10,26 +10,30 @@
 
 using namespace std;
 
-static vector<int> makeGuess(const int* arr, int len)
+static vector<int> makeGuess(const int arr[], int len)
 // create a vector given an arr of ints
 // this is a function private to program.cpp and used only for generating
 // guess
 {
     vector<int> v(arr, arr + len);
-    cout << "guess: ";
+    cout << "making guess: ";
     
     //print the guess sequence
-    for (int i = 0; i < v.size(); i++) 
+    for (int i = 0; i < v.size(); i++)
+    {
         cout << v[i] << ' ';
+    }
     
     cout << '\n';
     return v;
 }
 
 int main()
+//program entry point, creates a code and checks some guesses against it
 {
-    int length = 5;
-    int range = 10;
+    const int length = 5;
+    const int range = 10;
+    const int numGuesses = 3;
 
     Code code1(length,range);
     //print the code
@@ -37,15 +41,15 @@ int main()
     code1.print();
     cout << '\n';
     
-    // 2d int array to store the 3 guess 
-    int codeArr[3][5] = {{ 1, 2, 3, 4, 5 }, 
-                         { 3, 7, 4, 9, 2 }, 
-                         { 8, 2, 6, 0, 1 }};
+    // 2d int array to store the hardcoded guesses 
+    const int codeArr[numGuesses][length] = {{ 1, 2, 3, 4, 5 }, 
+                                             { 3, 7, 4, 9, 2 }, 
+                                             { 8, 2, 6, 0, 1 }};
 
-    // loop to make 3 guess
-    for (int i = 0; i < 3; i++)
+    // loop to make numGuesses
+    for (int i = 0; i < numGuesses; i++)
     {
-        vector<int> guess = makeGuess(codeArr[i], 5);
+        vector<int> guess = makeGuess(codeArr[i], length);
         cout << "number of extactly correct: ";
         cout << code1.checkCorrect(guess) << '\n';
     }
