@@ -1,3 +1,10 @@
+/** Project 1a program.cpp
+  * Jie Chen * Patrick Maguire
+  *
+  * This file is the entry point for the project. It defines the main method
+  * used to test the code class, specifically checkCode and print methods.
+  */
+#include <iostream>
 #include <vector>
 
 #include "code.h"
@@ -6,12 +13,15 @@ using namespace std;
 
 int main()
 {
-    for(int x = 0; x < 10; x++){
-        Code c(5,10);
-        vector<int> v(4,5);
-        v.push_back(9);
-        c.checkCorrect(v);
-        c.print();
+    Code code1(5,10);
+    int codeValues[] = { 1, 2, 3, 4, 5 };
+    //initialize the guess vector of the values of the int array codeValues
+    vector<int> guess(codeValues, 
+        codeValues + sizeof(codeValues)/sizeof(*codeValues));
 
-    }
+    //print the code and the number of correct with the given guess
+    cout << "Code ";
+    code1.print();
+    cout << " has " << code1.checkCorrect(guess) << " guess correct" << "\n";
+
 }
