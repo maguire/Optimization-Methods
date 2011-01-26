@@ -11,9 +11,9 @@
 using namespace std;
 
 static vector<int> makeGuess(const int arr[], int len)
-// create a vector given an arr of ints
+// create a vector given an array of ints
 // this is a function private to program.cpp and used only for generating
-// guess
+// guess -- represented by int vector --
 {
     vector<int> v(arr, arr + len);
     cout << "making guess: ";
