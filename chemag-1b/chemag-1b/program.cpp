@@ -38,8 +38,7 @@ int main()
 
     Code code1(length,range);
     //print the code
-    cout << "Code: ";
-    code1.print();
+    cout << "Code: " << code1;
     cout << '\n';
     
     // 2d int array to store the hardcoded guesses 

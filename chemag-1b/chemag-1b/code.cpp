@@ -54,7 +54,6 @@ int Code::checkCorrect (const vector<int> &guess) const
     return num_aligned;
 }
 
-
 int Code::checkIncorrect (const vector<int> &guess) const
 {
     int num_incorrect = 0;
@@ -76,3 +75,12 @@ int Code::checkIncorrect (const vector<int> &guess) const
     return num_incorrect;
 }
 
+ostream &operator<<(ostream &out, const Code &c)
+// << operator overload for Code objects
+{
+    for (int i = 0; i < c.seq.size(); i++) 
+    {
+	out << c.seq[i] << ' ';
+    }
+    return out;
+}
