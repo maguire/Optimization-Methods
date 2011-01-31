@@ -1,0 +1,1 @@
+astyle $1 --brackets=break --pad-header --pad-oper --convert-tabs --add-brackets
