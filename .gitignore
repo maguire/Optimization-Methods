@@ -3,3 +3,5 @@ Debug
 release
 Release
 *.user
+*.orig
+*.out
