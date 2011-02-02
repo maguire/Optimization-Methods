@@ -7,7 +7,9 @@
 
 #include <iostream>
 #include <vector>
-#include "code.h"
+#include "d_except.h"
+#include "Mastermind.h"
+
 
 using namespace std;
 
@@ -38,8 +40,7 @@ int main()
 
     Code code1(length,range);
     //print the code
-    cout << "Code: ";
-    code1.print();
+    cout << "Code: " << code1;
     cout << '\n';
     
     // 2d int array to store the hardcoded guesses 
@@ -57,4 +58,15 @@ int main()
         cout << "number of correct in wrong place: ";
         cout << code1.checkIncorrect(guess) << '\n';
     }
+
+
+	try
+	{
+		Mastermind master;
+		master.playGame();
+	}
+	catch(rangeError &re)
+	{
+		cout << re.what();
+	}
 }

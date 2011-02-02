@@ -13,7 +13,7 @@
 
 using namespace std;
 
-Code::Code (int n, int m) : count (10, 0)
+Code::Code (int n, int m) : count (10, 0), length(n)
 //public constructor which takes in the length of the mastermind code n, and
 // the range of the appropriate values m
 {
@@ -25,6 +25,7 @@ Code::Code (int n, int m) : count (10, 0)
         seq.push_back (temp);
         count[temp]++;
     }
+	
 }
 
 void Code::print() const
@@ -54,7 +55,6 @@ int Code::checkCorrect (const vector<int> &guess) const
     return num_aligned;
 }
 
-
 int Code::checkIncorrect (const vector<int> &guess) const
 {
     int num_incorrect = 0;
@@ -76,3 +76,20 @@ int Code::checkIncorrect (const vector<int> &guess) const
     return num_incorrect;
 }
 
+template <typename T>
+ostream &operator<<(ostream &out, const vector<T> &v)
+// << operator overload for Code objects
+{
+    for (int i = 0; i < v.size(); i++) 
+    {
+		out << v[i] << ' ';
+    }
+    return out;
+}
+
+
+ostream &operator<<(ostream &out, const Code &c)
+// << operator overload for Code objects
+{
+	return out << c.seq;
+}
