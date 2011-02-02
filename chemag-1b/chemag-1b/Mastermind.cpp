@@ -6,6 +6,8 @@
 using namespace std;
 
 Mastermind::Mastermind(int n, int m) : secretCode(n, m), length(n), range(10)
+// public constructor for creating a Mastermind object with a 
+// a secretCode (code object) with length n and digit range m
 {
     if (n < 0)
     {
@@ -18,10 +20,15 @@ Mastermind::Mastermind(int n, int m) : secretCode(n, m), length(n), range(10)
 }
 
 Mastermind::Mastermind() : secretCode(5, 10), length(5), range(10)
+// default Mastermind constructor that uses 5 and 10 as the default
+// parameters to create the code object
 {}
 
 
 void Mastermind::printFeedback(const int correct, const int incorrect) const
+// print the computer feedback 
+// (number of correct digits, and number of correct digit in the wrong place)
+// the data is passed in as parameters
 {
     if (correct == length)
     {
@@ -35,6 +42,8 @@ void Mastermind::printFeedback(const int correct, const int incorrect) const
 }
 
 vector<int> Mastermind::readInput() const
+// read user guess from the console
+// if the user inputs char 'e' we want to exit
 {
     vector<int> guess = vector<int>(5, 0);
     for (int i = 0; i < guess.size(); i++)
@@ -59,6 +68,7 @@ vector<int> Mastermind::readInput() const
 }
 
 void Mastermind::playGame() const
+// start a mastermind game, the user is allowed 10 guess
 {
     cout << secretCode << endl;
     const int numGuesses = 10;

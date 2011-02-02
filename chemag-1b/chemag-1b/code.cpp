@@ -56,6 +56,8 @@ int Code::checkCorrect (const vector<int> &guess) const
 }
 
 int Code::checkIncorrect (const vector<int> &guess) const
+// function to check the number of digits that is correct but in the 
+// wrong place.  no digit is counted twice
 {
     int num_incorrect = 0;
     vector<int> localCount = count;
@@ -78,7 +80,7 @@ int Code::checkIncorrect (const vector<int> &guess) const
 
 template <typename T>
 ostream &operator<<(ostream &out, const vector<T> &v)
-// << operator overload for Code objects
+// << operator overload for vector of a given type (T)
 {
     for (int i = 0; i < v.size(); i++)
     {
