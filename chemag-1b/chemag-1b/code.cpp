@@ -76,6 +76,7 @@ int Code::checkIncorrect (const vector<int> &guess) const
     return num_incorrect;
 }
 
+<<<<<<< HEAD
 template <typename T>
 ostream &operator<<(ostream &out, const vector<T> &v)
 // << operator overload for Code objects
@@ -93,3 +94,14 @@ ostream &operator<<(ostream &out, const Code &c)
 {
 	return out << c.seq;
 }
+=======
+ostream &operator<<(ostream &out, const Code &c)
+// << operator overload for Code objects
+{
+    for (int i = 0; i < c.seq.size(); i++) 
+    {
+	out << c.seq[i] << ' ';
+    }
+    return out;
+}
+>>>>>>> e726132da46dfc314eb21aa391f71b152fcfe242
