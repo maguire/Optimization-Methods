@@ -38,16 +38,25 @@ vector<int> Mastermind::readInput() const
     vector<int> guess = vector<int>(5, 0);
     for (int i = 0; i < guess.size(); i++)
     {
-        cout << "Add another guess to the sequence: ";
-
-        cin >> guess[i];
-        if (guess[i] >= range || guess[i] < 0)
+        cout << "Add another guess to the sequence (or type '(e)xit'): ";
+        char input[1];
+        cin >> input;
+        if (input[0] == 'e')
+        {
+            exit(0);
+        }
+        else if (atoi(input) >= range || input[0] < '0')
         {
             throw rangeError("You have given a value outside the range");
+        }
+        else 
+        {
+            guess[i] = atoi(input);
         }
     }
     return guess;
 }
+
 void Mastermind::playGame() const
 {
     cout << secretCode << endl;
