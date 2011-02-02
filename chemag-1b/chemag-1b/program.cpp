@@ -20,13 +20,13 @@ static vector<int> makeGuess(const int arr[], int len)
 {
     vector<int> v(arr, arr + len);
     cout << "making guess: ";
-    
+
     //print the guess sequence
     for (int i = 0; i < v.size(); i++)
     {
         cout << v[i] << ' ';
     }
-    
+
     cout << '\n';
     return v;
 }
@@ -38,15 +38,16 @@ int main()
     const int range = 10;
     const int numGuesses = 3;
 
-    Code code1(length,range);
+    Code code1(length, range);
     //print the code
     cout << "Code: " << code1;
     cout << '\n';
-    
-    // 2d int array to store the hardcoded guesses 
-    const int codeArr[numGuesses][length] = {{ 1, 2, 3, 4, 5 }, 
-                                             { 3, 7, 4, 9, 2 }, 
-                                             { 8, 2, 6, 0, 1 }};
+
+    // 2d int array to store the hardcoded guesses
+    const int codeArr[numGuesses][length] = {{ 1, 2, 3, 4, 5 },
+        { 3, 7, 4, 9, 2 },
+        { 8, 2, 6, 0, 1 }
+    };
 
     // loop to make numGuesses
     for (int i = 0; i < numGuesses; i++)
@@ -60,13 +61,13 @@ int main()
     }
 
 
-	try
-	{
-		Mastermind master;
-		master.playGame();
-	}
-	catch(rangeError &re)
-	{
-		cout << re.what();
-	}
+    try
+    {
+        Mastermind master;
+        master.playGame();
+    }
+    catch (rangeError &re)
+    {
+        cout << re.what();
+    }
 }
