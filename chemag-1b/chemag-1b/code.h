@@ -17,14 +17,12 @@ public:
     int checkCorrect(const vector<int> &guess) const;
     int checkIncorrect(const vector<int> &guess) const;
     void print() const;
-    int getLength() const { return length; }
     // associate the output operator with the Code class so we have
     // access to data member
     friend ostream &operator<<(ostream &out, const Code &c);
 
 
 private:
-    int length;
     vector<int> seq;
     vector<int> count;
 };

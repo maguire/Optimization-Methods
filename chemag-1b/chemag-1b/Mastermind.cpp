@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
 #include "Mastermind.h"
 
 using namespace std;
@@ -22,7 +23,7 @@ Mastermind::Mastermind() : secretCode(5, 10), length(5), range(10)
 
 void Mastermind::printFeedback(const int correct, const int incorrect) const
 {
-    if (correct == secretCode.getLength())
+    if (correct == length)
     {
         cout << "You guessed it right!" << endl;
     }
@@ -68,7 +69,7 @@ void Mastermind::playGame() const
         const int numCorrect = secretCode.checkCorrect(guess);
         const int numIncorrect = secretCode.checkIncorrect(guess);
         printFeedback(numCorrect, numIncorrect);
-        if (numCorrect == secretCode.getLength())
+        if (numCorrect == length)
         {
             return;
         }

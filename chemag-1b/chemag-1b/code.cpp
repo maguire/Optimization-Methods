@@ -13,7 +13,7 @@
 
 using namespace std;
 
-Code::Code (int n, int m) : count (10, 0), length(n)
+Code::Code (int n, int m) : count (10, 0)
 //public constructor which takes in the length of the mastermind code n, and
 // the range of the appropriate values m
 {
