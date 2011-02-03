@@ -46,7 +46,7 @@ vector<int> Mastermind::readInput() const
     vector<int> guess = vector<int>(secretCode.getLength(), 0);
     for (int i = 0; i < guess.size(); i++)
     {
-        cout << "Please input a integer: ";
+        cout << "Enter an int in range [0," << secretCode.getRange() << "): ";
         int input;
         cin >> input;
 
