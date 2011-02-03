@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Mastermind::Mastermind(int n, int m) : secretCode(n, m), length(n), range(10)
+Mastermind::Mastermind(int n, int m) : secretCode(n, m), length(n), range(m)
 // public constructor for creating a Mastermind object with a 
 // a secretCode (code object) with length n and digit range m
 {

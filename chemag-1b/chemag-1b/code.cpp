@@ -7,13 +7,12 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include "d_random.h"
 #include "code.h"
 
 using namespace std;
 
-Code::Code (int n, int m) : count (10, 0)
+Code::Code (int n, int m) : count (m, 0)
 //public constructor which takes in the length of the mastermind code n, and
 // the range of the appropriate values m
 {
