@@ -18,7 +18,7 @@ int main()
 {
     try
     {
-        Mastermind master(5, 10);
+        Mastermind master(5, 20);
         master.playGame();
     }
     catch (rangeError &re)
