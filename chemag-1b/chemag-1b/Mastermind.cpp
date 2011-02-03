@@ -50,9 +50,9 @@ vector<int> Mastermind::readInput() const
         int input;
         cin >> input;
 
-        //if the input was not a number, cin will set a failbit to true
-        // signaling a non-fatal error has occurred on input. if this happened, the
-        // user typed in something other than a number
+        // if the input was not a number, cin will set a failbit to true
+        // signaling a non-fatal error has occurred on input. if this happened,
+        // the user typed in something other than a number
         if (cin.fail())
         {
             throw rangeError("The input is not a number, exiting");

@@ -91,7 +91,7 @@ int Code::checkIncorrect (const vector<int> &guess) const
         {
             localCount[guess[i]]--;
         }
-    }
+    } // END for
 
     return num_incorrect;
 }
