@@ -46,37 +46,24 @@ vector<int> Mastermind::readInput() const
     vector<int> guess = vector<int>(secretCode.getLength(), 0);
     for (int i = 0; i < guess.size(); i++)
     {
-        cout << "Add another guess to the sequence (or type '(e)xit'): ";
+	cout << "Please input a integer (non-number to exit): ";       
+        int input;
+	bool isNum;
+	isNum = (cin >> input);
 
-        // set the length of the input char array by figuring out how many char
-        // should be in the input
-        int arrayLength = 1;
-        int x = secretCode.getRange();
-        while( x > 10 )
-        {
-            x /= 10; 
-            arrayLength++; 
-        }
-        // create a char array by allocating memory of arrayLength + '\0'
-        char *input = new char[arrayLength+1];
-        cin >> input;
-
-        if (input[0] == 'e' )
-        {
-            exit(0);
-        }
-        else if (atoi(input) >= secretCode.getRange() || input[0] < '0' || 
-            input[0] > '9')
+	if (!isNum)
+	{
+	    throw rangeError("The input is not a number, exiting");
+	}
+	else if (input >= secretCode.getRange() || input < 0)
         {
             throw rangeError("You have given a value outside the range");
         }
         else 
         {
-            guess[i] = atoi(input);
+            guess[i] = input;
         }
-        //clean up input array
-        delete [] input;
-        input = NULL;
+        
     }// END for
     return guess;
 }// END readInput()

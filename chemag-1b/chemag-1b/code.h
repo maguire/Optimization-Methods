@@ -18,7 +18,9 @@ public:
     int checkCorrect(const vector<int> &guess) const;
     int checkIncorrect(const vector<int> &guess) const;
     void print() const;
+    // return the length of the code
     int getLength() const { return length; }
+    // return the range of the digits in the code (0 indexed)
     int getRange() const { return range; }
     // associate the output operator with the Code class so we have
     // access to data member
