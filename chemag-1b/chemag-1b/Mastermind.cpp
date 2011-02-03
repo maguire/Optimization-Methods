@@ -70,7 +70,7 @@ vector<int> Mastermind::readInput() const
 void Mastermind::playGame() const
 // start a mastermind game, the user is allowed 10 guess
 {
-    cout << secretCode << endl;
+    cout << "the code is: " << secretCode << endl;
     const int numGuesses = 10;
 
     for (int i = 0; i < numGuesses; i++)
