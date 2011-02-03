@@ -1,9 +1,10 @@
-/** Project 1a code.h
+/** Project 1b code.h
   * Jie Chen * Patrick Maguire
   *
   * This file is the interface for the Code class.
   * It declares the public contstructor and methods checkCorrect, and print
-  * It also declares the private data member seq.
+  * It also declares the private data members (vector<int>seq,count and 
+  * (int)length,range.
   */
 #include <vector>
 
@@ -17,12 +18,15 @@ public:
     int checkCorrect(const vector<int> &guess) const;
     int checkIncorrect(const vector<int> &guess) const;
     void print() const;
+    int getLength() const { return length; }
+    int getRange() const { return range; }
     // associate the output operator with the Code class so we have
     // access to data member
     friend ostream &operator<<(ostream &out, const Code &c);
 
 
 private:
+    int length, range;
     vector<int> seq;
     vector<int> count;
 };

@@ -1,8 +1,8 @@
-/** Project 1a program.cpp
+/** Project 1b program.cpp
   * Jie Chen * Patrick Maguire
   *
   * This file is the entry point for the project. It defines the main method
-  * used to test the code class, specifically checkCode and print methods.
+  * used to test the code class, specifically checkCode.
   */
 
 #include <iostream>
@@ -18,7 +18,7 @@ int main()
 {
     try
     {
-        Mastermind master(5, 20);
+        Mastermind master(5, 10);
         master.playGame();
     }
     catch (rangeError &re)
@@ -26,3 +26,5 @@ int main()
         cout << re.what() << endl;
     }
 }
+
+
