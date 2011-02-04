@@ -13,7 +13,7 @@
 using namespace std;
 
 Mastermind::Mastermind(int n, int m) : secretCode(n, m)
-// public constructor for creating a Mastermind object with a 
+// public constructor for creating a Mastermind object with a
 // a secretCode (code object) with length n and digit range m
 {}
 
@@ -24,7 +24,7 @@ Mastermind::Mastermind() : secretCode(5, 10)
 
 
 void Mastermind::printFeedback(const int correct, const int incorrect) const
-// print the computer feedback 
+// print the computer feedback
 // (number of correct digits, and number of correct digit in the wrong place)
 // the data is passed in as parameters
 {
@@ -46,24 +46,26 @@ vector<int> Mastermind::readInput() const
     vector<int> guess = vector<int>(secretCode.getLength(), 0);
     for (int i = 0; i < guess.size(); i++)
     {
-	cout << "Please input a integer (non-number to exit): ";       
+        cout << "Enter an int in range [0," << secretCode.getRange() << "): ";
         int input;
-	bool isNum;
-	isNum = (cin >> input);
+        cin >> input;
 
-	if (!isNum)
-	{
-	    throw rangeError("The input is not a number, exiting");
-	}
-	else if (input >= secretCode.getRange() || input < 0)
+        // if the input was not a number, cin will set a failbit to true
+        // signaling a non-fatal error has occurred on input. if this happened,
+        // the user typed in something other than a number
+        if (cin.fail())
+        {
+            throw rangeError("The input is not a number, exiting");
+        }
+        else if (input >= secretCode.getRange() || input < 0)
         {
             throw rangeError("You have given a value outside the range");
         }
-        else 
+        else
         {
             guess[i] = input;
         }
-        
+
     }// END for
     return guess;
 }// END readInput()
@@ -72,7 +74,7 @@ void Mastermind::playGame() const
 // start a mastermind game, the user is allowed 10 guess
 {
     cout << "the code is: " << secretCode << endl;
-    
+
     for (int i = 0; i < NUM_GUESSES; i++)
     {
         const vector<int> guess = readInput();
