@@ -5,11 +5,11 @@ using namespace std;
 
 int main()
 {
-	int x = 0;
-	cout << Deck();
+    int x = 0;
+    cout << Deck();
     cin >> x;
 
-	cout << Deck();
+    cout << Deck();
     cin >> x;
-	
+
 }

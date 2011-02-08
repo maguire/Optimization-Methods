@@ -5,7 +5,7 @@ class Deck
 {
 public:
     Deck();
-	friend ostream &operator<<(ostream &out, const Deck &d);
+    friend ostream &operator<<(ostream &out, const Deck &d);
 
 private:
     node<Card>* cards;

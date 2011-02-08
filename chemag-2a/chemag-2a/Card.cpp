@@ -1,7 +1,7 @@
 #include "Card.h"
 #include "d_except.h"
 
-Card::Card(int val, SUIT s) 
+Card::Card(int val, SUIT s)
 {
     setValue(val);
     setSuit(s);
@@ -27,13 +27,13 @@ void Card::setSuit(SUIT s)
 ostream &operator<<(ostream &out, const Card &c)
 {
     int cardValue = c.getValue();
-    
+
     if (cardValue < 11)
     {
-	    out << cardValue << " of " << STR_SUIT[c.getSuit()];
-    }  
-    else 
-    {   
+        out << cardValue << " of " << STR_SUIT[c.getSuit()];
+    }
+    else
+    {
         out << royalValue[cardValue - 11] << " of " << STR_SUIT[c.getSuit()];
     }
 
