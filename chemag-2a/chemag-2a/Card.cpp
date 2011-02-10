@@ -2,12 +2,15 @@
 #include "d_except.h"
 
 Card::Card(int val, SUIT s)
+// simple Card constructor
 {
     setValue(val);
     setSuit(s);
 }
 
 void Card::setValue(int val)
+// setter for Card value, does bound checking
+// throws rangeError when out of bound parameter is passed
 {
     if (val <= 14 && val >= 2)
     {
@@ -25,6 +28,7 @@ void Card::setSuit(SUIT s)
 }
 
 ostream &operator<<(ostream &out, const Card &c)
+// overload '<<' operator for Card object
 {
     int cardValue = c.getValue();
 

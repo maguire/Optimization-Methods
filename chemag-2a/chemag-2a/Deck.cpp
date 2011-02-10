@@ -1,6 +1,8 @@
 #include "Deck.h"
 
 Deck::Deck()
+// the Deck default constructor that creates a deck in the following order:
+// all Clubs 2 - Ace, then Hearts, then Diamonds and Spades.
 {
     node<Card>* prev = NULL;
     for (int j = 3; j >= 0; j--)
@@ -17,6 +19,7 @@ Deck::Deck()
 }
 
 ostream &operator<<(ostream &out, const Deck &d)
+// overload output stream operator for Deck object
 {
     node<Card>* card = d.cards;
     while (card != NULL)
