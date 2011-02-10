@@ -1,3 +1,10 @@
+/** Project 2a Deck.h
+  * Jie Chen * Patrick Maguire
+  * 
+  * This file contains the interface for the Deck class
+  * 
+  **/
+
 #include "d_node.h"
 #include "Card.h"
 

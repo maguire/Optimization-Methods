@@ -1,3 +1,14 @@
+/** Project 2a Card.cpp
+  * Jie Chen * Patrick Maguire
+  * 
+  * This file contains the implementation for the Card class.
+  *
+  * It defines the constructor, setValue, setSuit, and a gobal function
+  * that overloads the output operator for the Card class
+  **/
+
+
+
 #include "Card.h"
 #include "d_except.h"
 

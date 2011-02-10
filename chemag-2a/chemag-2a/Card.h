@@ -1,3 +1,18 @@
+/** Project 2a Card.h
+  * Jie Chen * Patrick Maguire 
+  *
+  * This file contains the interface for the Card class
+  * 
+  * It declares the public constructor, the getter and setters for the data 
+  * members.
+  * 
+  * It declares the private data members value and suit
+  * 
+  * It contains data structure used for translations of values that 
+  * correspond to the royal values in a deck of cards
+  *
+  **/
+
 #include <string>
 #include <iostream>
 
