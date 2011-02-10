@@ -14,7 +14,8 @@
 
 Deck::Deck()
 // the Deck default constructor that creates a deck in the following order:
-// all Clubs 2 - Ace, then Hearts, then Diamonds and Spades.
+// all Clubs 2 -> Ace, then Hearts, then Diamonds and Spades.
+// design: the link list used to represent a deck is created backwards
 {
     node<Card>* prev = NULL;
     for (int j = 3; j >= 0; j--)
@@ -38,7 +39,6 @@ ostream &operator<<(ostream &out, const Deck &d)
     {
         out << card->nodeValue <<  endl;
         card = card->next;
-
     }
     return out;
 }

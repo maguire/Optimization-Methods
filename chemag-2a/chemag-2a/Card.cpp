@@ -7,8 +7,6 @@
   * that overloads the output operator for the Card class
   **/
 
-
-
 #include "Card.h"
 #include "d_except.h"
 
@@ -34,7 +32,17 @@ void Card::setValue(int val)
 }
 
 void Card::setSuit(SUIT s)
+// setter for the Card Suit, does bound checking
+// throws rangeError if given an invalid suit enum
 {
+    string msg = "the suit given is invalid, must be one of ";
+    msg += "enum {CLUBS, HEARTS, DIAMONDS, SPADES}";
+    
+    if (s > 3 || s < 0)
+    {
+	throw rangeError(msg);
+    }
+
     suit = s;
 }
 

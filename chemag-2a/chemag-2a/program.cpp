@@ -16,11 +16,10 @@ int main()
 {
     try
     {
-        cout << Deck();
+	cout << Deck();
     }
     catch (rangeError &re)
     {
         cout << re.what() << endl;
     }
-
 }
