@@ -17,14 +17,14 @@ static const string str_suit[] = { "Clubs", "Diamonds", "Hearts", "Spades" };
 
 static const string royalValue[] = { "Jack", "Queen", "King" , "Ace" };
 
-Card::Card(int val, Suit s)
+Card::Card(const int val, const Suit s)
 // simple Card constructor
 {
     setValue(val);
     setSuit(s);
 }
 
-void Card::setValue(int val)
+void Card::setValue(const int val)
 // setter for Card value, does bound checking
 // throws rangeError when out of bound parameter is passed
 {
@@ -38,14 +38,13 @@ void Card::setValue(int val)
     }
 }
 
-void Card::setSuit(Suit s)
+void Card::setSuit(const Suit s)
 // setter for the Card Suit, does bound checking
 // throws rangeError if given an invalid suit enum
 {
-
     if (s < 0 || s > 3)
     {
-        string msg = "the suit given is invalid, must be one of ";
+        string msg = "The suit given is invalid, must be one of: ";
         msg += "CLUBS, DIAMONDS, HEARTS, or SPADES";
 	    throw rangeError(msg);
     }
@@ -68,4 +67,4 @@ ostream &operator<<(ostream &out, const Card &c)
     }
 
     return out;
-}
+}// End operator<<()

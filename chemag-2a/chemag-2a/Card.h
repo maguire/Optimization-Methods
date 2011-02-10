@@ -21,20 +21,20 @@ static const enum Suit { CLUBS, DIAMONDS, HEARTS, SPADES };
 class Card
 {
 public:
-    Card(int, Suit);
+    Card(const int, const Suit);
     
     // getter for value
     int getValue() const { return value; }
     
     // setter for value
-    void setValue(int val);
+    void setValue(const int val);
     
     // getter for suit
     Suit getSuit() const { return suit; }
 
     // setter for suit
-    void setSuit(Suit s);
-    
+    void setSuit(const Suit s);
+
     // associate the output overload for Card object to grant access
     // to private data member
     friend ostream &operator<<(ostream &out, const Card &c);

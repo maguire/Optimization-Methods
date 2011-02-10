@@ -23,7 +23,7 @@ Deck::Deck()
         for (int i = 14; i >= 2; i--)
         {
             // create a new node in a linked list that contains
-            // a Card which the second argument ordinal must be cast to a SUIT
+            // a Card which the second argument ordinal must be cast to a Suit
             // enum
             cards = new node<Card>(Card(i, (Suit)j), prev);
             prev = cards;
