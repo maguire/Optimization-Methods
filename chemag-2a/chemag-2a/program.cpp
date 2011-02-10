@@ -16,7 +16,7 @@ int main()
 {
     try
     {
-	cout << Deck();
+	    cout << Deck();
     }
     catch (rangeError &re)
     {

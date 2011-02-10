@@ -25,7 +25,7 @@ Deck::Deck()
             // create a new node in a linked list that contains
             // a Card which the second argument ordinal must be cast to a SUIT
             // enum
-            cards = new node<Card>(Card(i, (SUIT)j), prev);
+            cards = new node<Card>(Card(i, (Suit)j), prev);
             prev = cards;
         }
     }

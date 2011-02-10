@@ -5,12 +5,19 @@
   *
   * It defines the constructor, setValue, setSuit, and a gobal function
   * that overloads the output operator for the Card class
+  *
+  * It contains data structure used for translations of values that 
+  * correspond to the royal values in a deck of cards
   **/
 
 #include "Card.h"
 #include "d_except.h"
 
-Card::Card(int val, SUIT s)
+static const string str_suit[] = { "Clubs", "Diamonds", "Hearts", "Spades" };
+
+static const string royalValue[] = { "Jack", "Queen", "King" , "Ace" };
+
+Card::Card(int val, Suit s)
 // simple Card constructor
 {
     setValue(val);
@@ -31,16 +38,16 @@ void Card::setValue(int val)
     }
 }
 
-void Card::setSuit(SUIT s)
+void Card::setSuit(Suit s)
 // setter for the Card Suit, does bound checking
 // throws rangeError if given an invalid suit enum
 {
-    string msg = "the suit given is invalid, must be one of ";
-    msg += "enum {CLUBS, HEARTS, DIAMONDS, SPADES}";
-    
-    if (s > 3 || s < 0)
+
+    if (s < 0 || s > 3)
     {
-	throw rangeError(msg);
+        string msg = "the suit given is invalid, must be one of ";
+        msg += "CLUBS, DIAMONDS, HEARTS, or SPADES";
+	    throw rangeError(msg);
     }
 
     suit = s;
@@ -53,11 +60,11 @@ ostream &operator<<(ostream &out, const Card &c)
 
     if (cardValue < 11)
     {
-        out << cardValue << " of " << STR_SUIT[c.getSuit()];
+        out << cardValue << " of " << str_suit[c.getSuit()];
     }
     else
     {
-        out << royalValue[cardValue - 11] << " of " << STR_SUIT[c.getSuit()];
+        out << royalValue[cardValue - 11] << " of " << str_suit[c.getSuit()];
     }
 
     return out;
