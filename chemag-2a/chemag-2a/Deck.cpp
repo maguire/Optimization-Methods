@@ -1,3 +1,15 @@
+/** Project 2a Deck.cpp
+  * Jie Chen * Patrick Maguire
+  * 
+  * This file contains the implementation for the Deck class
+  * 
+  * Define the Deck default constructor
+  * 
+  * Define the global function that overloads the '<<' operator for the Deck
+  * class
+  * 
+  **/
+
 #include "Deck.h"
 
 Deck::Deck()

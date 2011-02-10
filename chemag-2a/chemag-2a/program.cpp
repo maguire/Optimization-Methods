@@ -1,3 +1,11 @@
+/** Project 2a program.cpp
+  * Jie Chen * Patrick Maguire
+  * 
+  * This file is the entry point for the project. Defines the main function
+  * to run the program for testing.
+  * 
+  **/
+
 #include <iostream>
 #include "d_except.h"
 #include "Deck.h"
