@@ -16,7 +16,7 @@
 
 using namespace std;
 
-static const enum Suit { CLUBS, DIAMONDS, HEARTS, SPADES };
+enum Suit { CLUBS, DIAMONDS, HEARTS, SPADES };
 
 class Card
 {
