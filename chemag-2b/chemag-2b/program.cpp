@@ -12,23 +12,6 @@
 
 using namespace std;
 
-int main()
-// entry point for the program, handles exceptions thrown during execution
-{
-    try
-    {
-       // playFlip();
-        Deck d = Deck();
-	    cout << d << endl;
-        d.shuffle();
-        cout << d;
-    }
-    catch (rangeError &re)
-    {
-        cout << re.what() << endl;
-    }
-}
-/*
 void playFlip()
 {
     Deck flipDeck = Deck();
@@ -37,14 +20,15 @@ void playFlip()
     flipDeck.shuffle();
     flipDeck.shuffle();
 
-    string input;
     int score = 0;
-    while (input == " ")
-    {
-        cout << "Your score is: " << score << endl;
-        cout << "Press Space to Flip a Card, enter anything else to exit:";
-        cin >> input;
-        Card c = flipDeck.deal();
+	cout << "Your score is: " << score << endl;
+    cout << "Press Enter to Flip a Card, enter anything else to exit:";
+
+	int count = 0;
+    while (cin.get() == '\n')
+	{
+
+		Card c = flipDeck.deal();
         int value = c.getValue();
         Suit s = c.getSuit();
         if (value == 14) 
@@ -68,11 +52,45 @@ void playFlip()
             score = 0;
         }
 
-        if (s == Suit.HEARTS)
+        if (s == HEARTS)
         {
             score++;
         }
+		count++;
+
+		if (count == 52) 
+		{
+			cout << "You have played through the entire deck. " << endl;
+			break;
+		}
+
+		cout << "You got a " << c << ". Your score is: " << score << endl;
+        cout << "Press Enter to Flip a Card, enter anything else to exit:";
+		flipDeck.replace(c);
+		
     }
 
 }
-*/
+
+int main()
+// entry point for the program, handles exceptions thrown during execution
+{
+    try
+    {
+        playFlip();
+    }
+    catch (rangeError &re)
+    {
+        cout << re.what() << endl;
+    }
+	catch (underflowError &ue)
+	{
+		cout << ue.what() << endl;
+	}
+	catch (overflowError &oe)
+	{
+		cout << oe.what() << endl;
+	}
+
+}
+

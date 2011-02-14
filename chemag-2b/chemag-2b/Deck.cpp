@@ -11,6 +11,8 @@
   **/
 #include <vector>
 #include <algorithm>
+#include <ctime>
+#include "d_except.h"
 #include "Deck.h"
 
 
@@ -37,25 +39,60 @@ Deck::~Deck()
 //destructor for the Deck class deletes first node
 // which subsequently deletes each node 
 {
-    //TODO: write this 
+	node<Card>* next = NULL;
+    while (cards != NULL)
+    {
+        next = cards->next;
+		delete cards;
+		cards = next;
+    }
 }
 
 Card Deck::deal()
 //deal the next card off the top
 {
-    Card headCard = cards->nodeValue;
-    cards = cards->next;
-    return headCard;
+	if( cards != NULL )
+	{
+		node<Card>* c = cards;
+		Card headCard = c->nodeValue;
+		cards = cards->next;
+		delete c;
+		return headCard;
+	}
+	else 
+	{
+		throw underflowError("You cannot deal from an empty deck");
+	}
 }
 
 void Deck::replace(Card c)
+// put a given card at the bottom of the deck, ie the bottom of the linkedlist
 {
-    node<Card>* card = cards;
-    while(card != NULL)
+    node<Card>* crd;
+	node<Card>* lastCard;
+
+	crd = cards;
+	int count = 0;
+	// loop through the list to get to the last node
+    while(crd != NULL)
     {
-        card = card->next;
+		if (crd->next == NULL)
+		{
+			lastCard = crd; // save the last node
+		}
+        crd = crd->next;
+		count++;
     }
-    card->next = new node<Card>(c, NULL);
+
+	// if we tried to insert over 52 cards throw an error
+	if ( count > 51 )
+	{
+		throw overflowError("You can't add more cards to a full deck!");
+	}
+		
+	// link new card with bottom of the deck
+    crd = new node<Card>(c, NULL);
+	lastCard->next = crd;
 }
 
 void Deck::shuffle()
@@ -64,14 +101,18 @@ void Deck::shuffle()
 {
     vector<Card> shuffledCards;
     node<Card>* card = cards;
+	// convert the linkedList to a vector
     while(card != NULL)
     {
         shuffledCards.push_back(card->nodeValue);
         card = card->next;
     }
-
+	
+	// used standard library to shuffle the vector
+	srand( unsigned ( time( NULL)));
     random_shuffle(shuffledCards.begin(), shuffledCards.end());
     
+	// convert vector back to linkedList
     int i = 0;
     node<Card>* head;
     head = cards;
