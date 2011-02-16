@@ -66,8 +66,6 @@ void playFlip()
 
 		cout << "You got a " << c << ". Your score is: " << score << endl;
         cout << "Press Enter to Flip a Card, enter anything else to exit:";
-		flipDeck.replace(c);
-		
     }
 
 }
