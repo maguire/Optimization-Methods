@@ -11,6 +11,7 @@
 class Dictionary
 {
 public:
+    Dictionary();
     bool lookup(string word);
   
 private:
