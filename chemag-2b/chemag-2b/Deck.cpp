@@ -1,20 +1,18 @@
 /** Project 2b Deck.cpp
-  * Jie Chen * Patrick Maguire
-  * 
-  * This file contains the implementation for the Deck class
-  * 
-  * Define the Deck default constructor
-  * 
-  * Define the global function that overloads the '<<' operator for the Deck
-  * class
-  * 
-  **/
+ * Jie Chen * Patrick Maguire
+ * 
+ * This file contains the implementation for the Deck class
+ * 
+ * Define the Deck default constructor
+ * 
+ * Define the global function that overloads the '<<' operator for the Deck
+ * class
+ * 
+ **/
 #include <vector>
-#include <algorithm>
-#include <ctime>
 #include "d_except.h"
+#include "d_random.h"
 #include "Deck.h"
-
 
 Deck::Deck()
 // the Deck default constructor that creates a deck in the following order:
@@ -39,60 +37,60 @@ Deck::~Deck()
 //destructor for the Deck class deletes first node
 // which subsequently deletes each node 
 {
-	node<Card>* next = NULL;
+    node<Card>* next = NULL;
     while (cards != NULL)
     {
         next = cards->next;
-		delete cards;
-		cards = next;
+	delete cards;
+	cards = next;
     }
 }
 
 Card Deck::deal()
 //deal the next card off the top
 {
-	if( cards != NULL )
-	{
-		node<Card>* c = cards;
-		Card headCard = c->nodeValue;
-		cards = cards->next;
-		delete c;
-		return headCard;
-	}
-	else 
-	{
-		throw underflowError("You cannot deal from an empty deck");
-	}
+    if( cards != NULL )
+    {
+	node<Card>* c = cards;
+	Card headCard = c->nodeValue;
+	cards = cards->next;
+	delete c;
+	return headCard;
+    }
+    else 
+    {
+	throw underflowError("You cannot deal from an empty deck");
+    }
 }
 
 void Deck::replace(Card c)
 // put a given card at the bottom of the deck, ie the bottom of the linkedlist
 {
     node<Card>* crd;
-	node<Card>* lastCard;
+    node<Card>* lastCard;
 
-	crd = cards;
-	int count = 0;
-	// loop through the list to get to the last node
+    crd = cards;
+    int count = 0;
+    // loop through the list to get to the last node
     while(crd != NULL)
     {
-		if (crd->next == NULL)
-		{
-			lastCard = crd; // save the last node
-		}
+	if (crd->next == NULL)
+	{
+	    lastCard = crd; // save the last node
+	}
         crd = crd->next;
-		count++;
+	count++;
     }
 
-	// if we tried to insert over 52 cards throw an error
-	if ( count > 51 )
-	{
-		throw overflowError("You can't add more cards to a full deck!");
-	}
+    // if we tried to insert over 52 cards throw an error
+    if ( count > 51 )
+    {
+	throw overflowError("You can't add more cards to a full deck!");
+    }
 		
-	// link new card with bottom of the deck
+    // link new card with bottom of the deck
     crd = new node<Card>(c, NULL);
-	lastCard->next = crd;
+    lastCard->next = crd;
 }
 
 void Deck::shuffle()
@@ -101,18 +99,24 @@ void Deck::shuffle()
 {
     vector<Card> shuffledCards;
     node<Card>* card = cards;
-	// convert the linkedList to a vector
+    // convert the linkedList to a vector
     while(card != NULL)
     {
         shuffledCards.push_back(card->nodeValue);
         card = card->next;
     }
 	
-	// used standard library to shuffle the vector
-	srand( unsigned ( time( NULL)));
-    random_shuffle(shuffledCards.begin(), shuffledCards.end());
-    
-	// convert vector back to linkedList
+    // shuffle the vector of cards
+    randomNumber genRandNum;
+    for (int i = shuffledCards.size()-1; i > 0; i--)
+    {
+	int j = genRandNum.random(i);
+	Card tmp = shuffledCards[i];
+	shuffledCards[i] = shuffledCards[j];
+	shuffledCards[j] = tmp;	
+    }
+
+    // convert vector back to linkedList
     int i = 0;
     node<Card>* head;
     head = cards;
