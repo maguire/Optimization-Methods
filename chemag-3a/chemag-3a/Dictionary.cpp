@@ -22,24 +22,26 @@ Dictionary::Dictionary() : wordLst(vector<string>())
     {
 	while (fins.good())
 	{
-	    getline(myfins, line);
+	    getline(fins, line);
 	    wordLst.push_back(line);
 	}
+	fins.close();
     }
     else
     {
 	cout << "warning: was unable to open dictionary";
     }
+    
 }
     
 bool Dictionary::lookup(string s)
 // search the dictionary to see if the input string is a word
 // returns a bool
 {
-    vector<string> iter = wordLst.begin();
-    
-    while (iter != wordLst.end() && *iter != s)
-    {}
-
-    return iter != wordLst.end();
+    for (int i = 0; i < wordLst.size(); i++)
+    {
+	if (wordLst[i] == s)
+	    return true;
+    }
+    return false;
 }
