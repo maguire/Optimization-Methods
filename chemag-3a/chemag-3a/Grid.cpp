@@ -13,6 +13,7 @@
 
 vector<string> tokenize(const string &str, char delimit = ' ')
 // given a string split it into tokens by the given delimiter
+// this is a global function
 {
     vector<string> tokens;
     int prev = 0;
