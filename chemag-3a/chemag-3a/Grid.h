@@ -16,6 +16,6 @@ public:
     Grid(string in_fd);
     
 private:
-    matrix<char> mx;
+    matrix<string> mx;
 
 };
