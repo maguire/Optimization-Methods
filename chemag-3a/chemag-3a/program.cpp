@@ -8,8 +8,12 @@ void checkSurrounding(int rowIndex, int colIndex,
 		      const matrix<string> &mx, 
 		      const Dictionary &dict, 
 		      int minWordLength, int deltaX, int deltaY)
-
 {
+    if (deltaX == 0 && deltaY == 0)
+    {
+        // if there is no slope, we will go nowhere
+        return; 
+    }
     int x = rowIndex;
     int y = colIndex;
     string currentWord = mx[x][y];
@@ -103,22 +107,21 @@ void checkUpLeftDiag(int rowIndex, int colIndex, const matrix<string> &mx,
 }
 
 void findMatches(const Dictionary &dict, const Grid &g)
-
 {
     matrix<string> mx = g.getMatrix();
     for (int i = 0; i < mx.rows(); i++)
     {
-        for (int j = 0; j < mx.cols(); j++)
-        {
-            checkUp(i, j, mx, dict );
-            checkDown(i, j, mx, dict);
-            checkLeft(i, j, mx, dict);
-            checkRight(i, j, mx, dict);
-            checkDownRightDiag(i, j, mx, dict);
-            checkDownLeftDiag(i, j, mx, dict);
-            checkUpRightDiag(i, j, mx, dict);
-            checkUpLeftDiag(i, j, mx, dict);
-        }
+	for (int j = 0; j < mx.cols(); j++)
+	{
+	    checkSurrounding(i, j, mx, dict, -1,-1);
+            checkSurrounding(i, j, mx, dict, -1, 0); 
+            checkSurrounding(i, j, mx, dict, -1, 1); 
+            checkSurrounding(i, j, mx, dict, 0, -1) 
+            checkSurrounding(i, j, mx, dict, 0, 1); 
+            checkSurrounding(i, j, mx, dict, 1, -1);
+            checkSurrounding(i, j, mx, dict, 1, 0); 
+            checkSurrounding(i, j, mx, dict, 1, 1); 
+	}
     }
 }
 
