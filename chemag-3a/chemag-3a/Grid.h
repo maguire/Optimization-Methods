@@ -14,7 +14,8 @@ class Grid
 {
 public:
     Grid(string in_fd);
-    
+    void print();
+
 private:
     matrix<string> mx;
 

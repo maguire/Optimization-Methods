@@ -8,9 +8,11 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 #include "Grid.h"
 
 vector<string> tokenize(const string &str, char delimit = ' ')
+// given a string split it into tokens by the given delimiter
 {
     vector<string> tokens;
     int prev = 0;
@@ -31,6 +33,8 @@ vector<string> tokenize(const string &str, char delimit = ' ')
 }
 
 Grid::Grid(string in_fd)
+// public Grid constructor 
+// given a file, read the file and create a matrix according to the file
 {
     string line;
     ifstream fins;
@@ -39,10 +43,34 @@ Grid::Grid(string in_fd)
 
     if (fins.is_open())
     {
-	    //read the first line, which tells us the size of the matrix
+	//read the first line, which tells us the size of the matrix
     	getline(fins, line);
         vector<string> vs = tokenize(line);
         mx = matrix<string>(atoi(vs[0].c_str()), atoi(vs[1].c_str()));
+		
+	for (int i = 0; i < mx.rows(); i++)
+	{
+	    getline(fins, line);
+	    vs = tokenize(line);
+	    for (int j = 0; j < mx.cols(); j++)
+	    {
+		mx[i][j] = vs[j];
+	    }
+	}
     }
     fins.close();
+}
+
+void Grid::print()
+// not require by spec, for sanity check purpose only
+// print a grid
+{
+    for (int i = 0; i < mx.rows(); i++)
+    {
+	for (int j = 0; j < mx.cols(); j++)
+	{
+	    cout << mx[i][j] << ' ';
+	}
+	cout << endl;
+    }
 }
