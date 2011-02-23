@@ -4,15 +4,15 @@
 
 using namespace std;
 
-void checkSurrounding(int rowIndex, int colIndex, 
-		      const matrix<string> &mx, 
-		      const Dictionary &dict, 
-		      int minWordLength, int deltaX, int deltaY)
+void checkSurrounding(int rowIndex, int colIndex,
+                      const matrix<string> &mx,
+                      const Dictionary &dict,
+                      int deltaX, int deltaY, int minWordLength = 5)
 {
     if (deltaX == 0 && deltaY == 0)
     {
         // if there is no slope, we will go nowhere
-        return; 
+        return;
     }
     int x = rowIndex;
     int y = colIndex;
@@ -56,72 +56,23 @@ void checkSurrounding(int rowIndex, int colIndex,
     }
 }
 
-void checkUp(int rowIndex, int colIndex, const matrix<string> &mx, 
-	     const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, 0, -1);
-}
-void checkDown(int rowIndex, int colIndex, const matrix<string> &mx, 
-	       const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, 0, 1);
-}
-void checkRight(int rowIndex, int colIndex, const matrix<string> &mx, 
-		const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, 1, 0);
-}
-void checkLeft(int rowIndex, int colIndex, const matrix<string> &mx, 
-	       const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, -1, 0);
-}
-void checkDownRightDiag(int rowIndex, int colIndex, const matrix<string> &mx, 
-			const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, 1, 1);
-}
-void checkDownLeftDiag(int rowIndex, int colIndex, const matrix<string> &mx, 
-		       const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, -1, 1);
-}
-void checkUpRightDiag(int rowIndex, int colIndex, const matrix<string> &mx, 
-		      const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, 1, -1);
-}
-
-void checkUpLeftDiag(int rowIndex, int colIndex, const matrix<string> &mx, 
-		     const Dictionary &dict, int minWordLength = 5)
-
-{
-    checkSurrounding(rowIndex, colIndex, mx, dict, minWordLength, -1, -1);
-}
-
 void findMatches(const Dictionary &dict, const Grid &g)
 {
     matrix<string> mx = g.getMatrix();
     for (int i = 0; i < mx.rows(); i++)
     {
-	for (int j = 0; j < mx.cols(); j++)
-	{
-	    checkSurrounding(i, j, mx, dict, -1,-1);
-            checkSurrounding(i, j, mx, dict, -1, 0); 
-            checkSurrounding(i, j, mx, dict, -1, 1); 
-            checkSurrounding(i, j, mx, dict, 0, -1) 
-            checkSurrounding(i, j, mx, dict, 0, 1); 
+        for (int j = 0; j < mx.cols(); j++)
+        {
+
+            checkSurrounding(i, j, mx, dict, -1, -1);
+            checkSurrounding(i, j, mx, dict, -1, 0);
+            checkSurrounding(i, j, mx, dict, -1, 1);
+            checkSurrounding(i, j, mx, dict, 0, -1);
+            checkSurrounding(i, j, mx, dict, 0, 1);
             checkSurrounding(i, j, mx, dict, 1, -1);
-            checkSurrounding(i, j, mx, dict, 1, 0); 
-            checkSurrounding(i, j, mx, dict, 1, 1); 
-	}
+            checkSurrounding(i, j, mx, dict, 1, 0);
+            checkSurrounding(i, j, mx, dict, 1, 1);
+        }
     }
 }
 
