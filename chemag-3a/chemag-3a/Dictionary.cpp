@@ -17,31 +17,32 @@ Dictionary::Dictionary() : wordLst(vector<string>())
     string line;
     ifstream fins;
     fins.open("dictionary");
-    
+
     if (fins.is_open())
     {
-	while (fins.good())
-	{
-	    getline(fins, line);
-	    wordLst.push_back(line);
-	}
-	fins.close();
+        while (getline(fins, line))
+        {
+            wordLst.push_back(line);
+        }
+        fins.close();
     }
     else
     {
-	cout << "warning: was unable to open dictionary";
+        cout << "warning: was unable to open dictionary";
     }
-    
+
 }
-    
-bool Dictionary::lookup(string s)
+
+bool Dictionary::lookup(string s) const
 // search the dictionary to see if the input string is a word
 // returns a bool
 {
     for (int i = 0; i < wordLst.size(); i++)
     {
-	if (wordLst[i] == s)
-	    return true;
+        if (wordLst[i] == s)
+        {
+            return true;
+        }
     }
     return false;
 }

@@ -28,13 +28,13 @@ vector<string> tokenize(const string &str, char delimit = ' ')
     }
 
     // the loop will skip the last token make sure that gets in the vector
-    tokens.push_back(str.substr(prev, str.length() - prev));   
-    
+    tokens.push_back(str.substr(prev, str.length() - prev));
+
     return tokens;
 }
 
 Grid::Grid(string in_fd)
-// public Grid constructor 
+// public Grid constructor
 // given a file, read the file and create a matrix according to the file
 {
     string line;
@@ -44,20 +44,20 @@ Grid::Grid(string in_fd)
 
     if (fins.is_open())
     {
-	//read the first line, which tells us the size of the matrix
-    	getline(fins, line);
+        //read the first line, which tells us the size of the matrix
+        getline(fins, line);
         vector<string> vs = tokenize(line);
         mx = matrix<string>(atoi(vs[0].c_str()), atoi(vs[1].c_str()));
-		
-	for (int i = 0; i < mx.rows(); i++)
-	{
-	    getline(fins, line);
-	    vs = tokenize(line);
-	    for (int j = 0; j < mx.cols(); j++)
-	    {
-		mx[i][j] = vs[j];
-	    }
-	}
+
+        for (int i = 0; i < mx.rows(); i++)
+        {
+            getline(fins, line);
+            vs = tokenize(line);
+            for (int j = 0; j < mx.cols(); j++)
+            {
+                mx[i][j] = vs[j];
+            }
+        }
     }
     fins.close();
 }
@@ -68,10 +68,10 @@ void Grid::print()
 {
     for (int i = 0; i < mx.rows(); i++)
     {
-	for (int j = 0; j < mx.cols(); j++)
-	{
-	    cout << mx[i][j] << ' ';
-	}
-	cout << endl;
+        for (int j = 0; j < mx.cols(); j++)
+        {
+            cout << mx[i][j] << ' ';
+        }
+        cout << endl;
     }
 }
