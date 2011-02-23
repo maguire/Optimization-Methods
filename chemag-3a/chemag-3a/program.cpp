@@ -16,7 +16,8 @@ using namespace std;
 void checkSurrounding(int rowIndex, int colIndex,
                       const matrix<string> &mx,
                       const Dictionary &dict,
-                      int deltaX, int deltaY, int minWordLength = 5)
+                      const int deltaX, const int deltaY, 
+		      const int minWordLength = 5)
 // search for words in the direction given by delta x and y
 // starting from the location rowIndex and colIndex
 // for seach string longer than 5 check with the dictionary
