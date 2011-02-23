@@ -1,6 +1,7 @@
 #include "Grid.h"
+#include "Dictionary.h"
 
-void findMatches(const dictionary &dict, const matrix &mx);
+void findMatches(const Dictionary &dict, const matrix<string> &mx);
 
 int main()
 {
@@ -9,13 +10,14 @@ int main()
 }
 
 
-void findMatches(const dictionary &dict, const matrix &mx)
+void findMatches(const Dictionary &dict, const matrix<string> &mx)
 {
     for (int i = 0; i < mx.rows(); i++)
     {
 	for (int j = 0; j < mx.cols(); j++)
 	{
-	    
+	  
 	}
     }
 }
+
