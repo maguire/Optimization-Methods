@@ -3,7 +3,8 @@
   *
   * This file contains the implmentation for the Grid class
   *    - defines the public grid constructor
-  *
+  *    - defines the overloaded [] operator
+  *    - defines a print method 
   **/
 
 #include <fstream>

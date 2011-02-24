@@ -17,7 +17,7 @@ public:
    
      vector<string>& operator[] (int i);
     // index operator.
-    // Precondition: 0 <= i < nRows. a violation of this
+    // Precondition: 0 <= i < _size. a violation of this
     // precondition throws the indexRangeError exception.
     // Postcondition: if the operator is used on the left-hand
     // side of an assignment statement, an element of row i 
