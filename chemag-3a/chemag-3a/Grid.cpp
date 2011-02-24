@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
+#include "d_except.h"
 #include "Grid.h"
 
 Grid::Grid(string in_fd)
@@ -33,6 +34,10 @@ Grid::Grid(string in_fd)
             }
         }
     }
+    else
+    {
+        throw fileOpenError(in_fd);
+    }
     fins.close();
 }
 
@@ -41,8 +46,7 @@ Grid::Grid(string in_fd)
 vector<string>& Grid::operator[] (int i)
 {
    if (i < 0 || i >= _size)
-      throw indexRangeError(
-	 "Grid: invalid row index", i, _size);
+      throw indexRangeError("Grid: invalid row index", i, _size);
 
    return mx[i];
 }
@@ -52,8 +56,7 @@ vector<string>& Grid::operator[] (int i)
 const vector<string>& Grid::operator[] (int i) const
 {
    if (i < 0 || i >= _size)
-      throw indexRangeError(
-	 "Grid: invalid row index", i, _size);
+      throw indexRangeError("Grid: invalid row index", i, _size);
 
    return mx[i];
 }

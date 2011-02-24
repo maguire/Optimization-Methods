@@ -8,15 +8,25 @@
 
 #include <fstream>
 #include <iostream>
+#include "d_except.h"
 #include "Dictionary.h"
 
-Dictionary::Dictionary() : wordLst(vector<string>())
+
+Dictionary::Dictionary(string filename) : wordLst(vector<string>())
 // default public constructor for the Dictionary class
+// reads the dictionary file and store all the words in a vector
+{
+    init(filename);
+}
+
+
+void Dictionary::init(string filename)
+// called by the Dictionary constructor
 // reads the dictionary file and store all the words in a vector
 {
     string line;
     ifstream fins;
-    fins.open("dictionary");
+    fins.open(filename.c_str());
 
     if (fins.is_open())
     {
@@ -28,9 +38,8 @@ Dictionary::Dictionary() : wordLst(vector<string>())
     }
     else
     {
-        cout << "warning: was unable to open dictionary";
+        throw fileOpenError(filename);
     }
-
 }
 
 bool Dictionary::lookup(string s) const

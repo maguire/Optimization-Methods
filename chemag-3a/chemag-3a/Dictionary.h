@@ -13,9 +13,10 @@ using namespace std;
 class Dictionary
 {
 public:
-    Dictionary();
+    Dictionary(string file = "dictionary");
     bool lookup(string word) const;
 
 private:
+    void init(string filename);
     vector<string> wordLst;
 };
