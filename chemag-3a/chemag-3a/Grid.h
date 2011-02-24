@@ -14,13 +14,22 @@ class Grid
 {
 public:
     Grid(string in_fd);
-    matrix<string> getMatrix() const
-    {
-        return mx;
-    }
+   
+     vector<string>& operator[] (int i);
+    // index operator.
+    // Precondition: 0 <= i < nRows. a violation of this
+    // precondition throws the indexRangeError exception.
+    // Postcondition: if the operator is used on the left-hand
+    // side of an assignment statement, an element of row i 
+    // is changed
+    
+    const vector<string>& operator[](int i) const;
+    // version for constant objects
+   
+    int size() const { return _size; }
     void print();
 
 private:
     matrix<string> mx;
-
+    int _size;
 };

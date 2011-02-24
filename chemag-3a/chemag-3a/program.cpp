@@ -14,13 +14,13 @@
 using namespace std;
 
 void checkSurrounding(int rowIndex, int colIndex,
-                      const matrix<string> &mx,
+                      const Grid &grid,
                       const Dictionary &dict,
                       const int deltaX, const int deltaY, 
 		      const int minWordLength = 5)
 // search for words in the direction given by delta x and y
 // starting from the location rowIndex and colIndex
-// for seach string longer than 5 check with the dictionary
+// for seach string longer than minWordLength check with the dictionary
 // print the string if it is a word according to the dictionary
 {
     if (deltaX == 0 && deltaY == 0)
@@ -30,8 +30,8 @@ void checkSurrounding(int rowIndex, int colIndex,
     }
     int x = rowIndex;
     int y = colIndex;
-    string currentWord = mx[x][y];
-    while (currentWord.length() <= mx.rows())
+    string currentWord = grid[x][y];
+    while (currentWord.length() <= grid.size())
     {
         if (currentWord.length() >= minWordLength)
         {
@@ -40,60 +40,45 @@ void checkSurrounding(int rowIndex, int colIndex,
                 cout << currentWord << endl;
             }
         }
-        if (deltaX + x >= mx.rows())
-        {
-            x = 0;
-        }
-        else if (deltaX + x < 0)
-        {
-            x = mx.rows() - 1;
-        }
-        else
-        {
-            x += deltaX;
-        }
+        // make sure the x,y values are within range and wrap around
+        x = (x + deltaX + grid.size()) % grid.size();
+        y = (y + deltaY + grid.size()) % grid.size();
+        
+        currentWord = currentWord + grid[x][y];
 
-        if (y + deltaY >= mx.cols())
-        {
-            y = 0;
-        }
-        else if (y + deltaY < 0)
-        {
-            y = mx.cols() - 1;
-        }
-        else
-        {
-            y += deltaY;
-        }
-
-        currentWord = currentWord + mx[x][y];
-    }
-}
+    } //end while loop
+} //end  checkSurrounding
 
 void findMatches(const Dictionary &dict, const Grid &g)
 // search the grid for all strings and print the ones that are words
 // according to the given dictionary
 {
-    matrix<string> mx = g.getMatrix();
-    for (int i = 0; i < mx.rows(); i++)
+    for (int i = 0; i < g.size(); i++)
     {
-        for (int j = 0; j < mx.cols(); j++)
+        for (int j = 0; j < g.size(); j++)
         {
-
-            checkSurrounding(i, j, mx, dict, -1, -1);
-            checkSurrounding(i, j, mx, dict, -1, 0);
-            checkSurrounding(i, j, mx, dict, -1, 1);
-            checkSurrounding(i, j, mx, dict, 0, -1);
-            checkSurrounding(i, j, mx, dict, 0, 1);
-            checkSurrounding(i, j, mx, dict, 1, -1);
-            checkSurrounding(i, j, mx, dict, 1, 0);
-            checkSurrounding(i, j, mx, dict, 1, 1);
-        }
-    }
-}
+            // check Up Left Diagonal
+            checkSurrounding(i, j, g, dict, -1, -1);
+            // check Up 
+            checkSurrounding(i, j, g, dict, -1, 0);
+            // check Up Right Diagonal
+            checkSurrounding(i, j, g, dict, -1, 1);
+            // check Left
+            checkSurrounding(i, j, g, dict, 0, -1);
+            // check Right
+            checkSurrounding(i, j, g, dict, 0, 1);
+            // check Down Left Diagonal
+            checkSurrounding(i, j, g, dict, 1, -1);
+            // check Down 
+            checkSurrounding(i, j, g, dict, 1, 0);
+            // check Down Right Diagonal
+            checkSurrounding(i, j, g, dict, 1, 1);
+        } //end inner for
+    }// end outer for
+}// end findMatches
 
 void testSearch()
-// test function that reads the grid file from the keyboard
+// function that reads the grid file from the keyboard
 // and runs search on the grid with a dictionary
 {
     string gridFileName;
