@@ -1,9 +1,10 @@
 
-/** Project 3b QuickSortedVecotrDictionary.h
+/** Project 3b SelectionSortedVectorDictionary.h
   * Jie Chen * Patrick Maguire
   *
   *
-  * This file contains the interface for the Dictionary class
+  * This file contains the implementation for the 
+  * SelectionSortedVectorDictionary class
   **/
 
 #include <iostream>
@@ -16,11 +17,13 @@ using namespace std;
 
 SelectionSortedVectorDictionary::SelectionSortedVectorDictionary(string file) 
     : SortedVectorDictionary(file)
+// constructor for the class
 {
     sort();
 }
 
 void selectionSort(vector<string> &unsorted)
+// perform selection sort on the string vector
 {
     for(int i = 0 ; i < unsorted.size() - 1; i++)
     {

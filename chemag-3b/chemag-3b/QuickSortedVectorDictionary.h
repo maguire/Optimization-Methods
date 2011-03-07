@@ -1,8 +1,9 @@
-/** Project 3b QuickSortedVecotrDictionary.h
+/** Project 3b QuickSortedVectorDictionary.h
   * Jie Chen * Patrick Maguire
   *
   *
-  * This file contains the interface for the Dictionary class
+  * This file contains the interface for the QuickSortedVectorDictionary
+  * class
   **/
 
 #include <vector>

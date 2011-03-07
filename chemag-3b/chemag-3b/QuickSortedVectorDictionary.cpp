@@ -1,9 +1,11 @@
 
-/** Project 3b QuickSortedVecotrDictionary.h
+/** Project 3b QuickSortedVectorDictionary.h
   * Jie Chen * Patrick Maguire
   *
   *
-  * This file contains the interface for the Dictionary class
+  * This file contains the implementation for the QuickSortedVectorDictionary 
+  * class
+  *   - defines partition, quickSort, and the constructor
   **/
 
 #include <iostream>
@@ -16,11 +18,14 @@ using namespace std;
 
 QuickSortedVectorDictionary::QuickSortedVectorDictionary(string file) 
     : SortedVectorDictionary(file)
+// constructor for QuickSortedVectorDictionary
 {
     sort();
 }
 
 int partition(vector<string> &unsorted, int begin, int end, int pivotIndex)
+// parition the vector around the pivot such that, all smaller values are 
+// on left and larger values are on right of the pivot
 {
     swap(unsorted[pivotIndex], unsorted[end]);
     int start = begin;
@@ -39,6 +44,7 @@ int partition(vector<string> &unsorted, int begin, int end, int pivotIndex)
 
 
 void quickSort(vector<string> &unsorted, int begin, int end)
+// do quick sort on string vector
 {
     if( end > begin ){
         int pivot = (begin + end) / 2;
@@ -47,6 +53,7 @@ void quickSort(vector<string> &unsorted, int begin, int end)
         quickSort(unsorted, pivot + 1, end); 
     }
 }
+
 void QuickSortedVectorDictionary::sort()
 {
     quickSort(wordLst, 0, wordLst.size()-1); 
