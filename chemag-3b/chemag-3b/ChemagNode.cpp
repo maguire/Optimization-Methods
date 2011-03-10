@@ -13,7 +13,7 @@
 
 using namespace std;
 
-ChemagNode::ChemagNode(string word, bool inDict) 
+ChemagNode::ChemagNode(string word, bool inDict)
 {
 	this->word = word;
 	this->inDict = inDict;
@@ -24,12 +24,17 @@ string ChemagNode::getWord() const
 	return this->word;
 }
 
+void ChemagNode::setInDict(bool inDict)
+{
+    this->inDict = inDict;
+}
+
 bool ChemagNode::getInDict() const
 {
 	return this->inDict;
 }
 
-ChemagHashTableDictionary &ChemagNode::getNextLevel() const
+ChemagHashTableDictionary<ChemagNode> &ChemagNode::getNextLevel() 
 {
 	return this->nextLevel;
 }

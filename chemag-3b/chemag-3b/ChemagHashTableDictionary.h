@@ -8,28 +8,29 @@
   * multi-leveled tree like structure
   **/
 
-#ifndef ChemagHashTableDictionary
-#define ChemagHashTableDictionary
+#ifndef ChemagHashTableDictionary_H
+#define ChemagHashTableDictionary_H
 
 #include <vector>
 #include <string>
 #include "Dictionary.h"
-#include "ChemagNode.h"
 
 using namespace std;
 
-class ChemagHashTableDictionary : public Dictionary
+template <class T>
+class ChemagHashTableDictionary 
 {
 public:
     ChemagHashTableDictionary(string file = "dictionary");
-    bool lookup(string word) const;
-	void put(string key, ChemagNode value);
-	void get(string key) const;
+    vector<string> lookup(string word) const;
+	void put(char key, const T &value);
+	T get(char key) const;
 	
 private:
 	int hash(string key) const;
     void init(string filename);
-	vector<ChemagNode> topLevel;
+    
+	vector<T> topLevel;
 };
 
 #endif

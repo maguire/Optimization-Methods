@@ -47,5 +47,4 @@ void SelectionSortedVectorDictionary::sort()
 // sort the dictionary
 {
     selectionSort(wordLst); 
-    print();
 }

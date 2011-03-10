@@ -4,37 +4,37 @@
   *
   * This file contains the interface for the Dictionary class
   **/
-
+#include <fstream>
+#include "d_except.h"
+#include "ChemagNode.h"
 #include "ChemagHashTableDictionary.h"
 
 using namespace std;
-
-ChemagHashTableDictionary::ChemagHashTableDictionary(string file)
+template <class T>
+ChemagHashTableDictionary<T>::ChemagHashTableDictionary(string file)
 {
 	init(file);
 }
-bool ChemagHashTableDictionary::lookup(string word) const
+template <class T>
+vector<string> ChemagHashTableDictionary<T>::lookup(string word) const
 {
-	//
+	//find all the words in this hashtree that are a part of this word
+
 }
 
-void ChemagHashTableDictionary::put(char key, const ChemagNode &value)
+template <class T>
+void ChemagHashTableDictionary<T>::put(char key, const T &value)
 {
 	topLevel[key-'a'] = value;
 }
-ChemagNode ChemagHashTableDictionary::get(string key) const
-{
-	if (topLevel[key-'a'])
-	{
-		return topLevel[key-'a'];
-	}
-	else 
-	{
-		return NULL;
-	}
-}
 
-void ChemagHashTableDictionary::init(string filename)
+template <class T>
+T ChemagHashTableDictionary<T>::get(char key) const
+{
+    return topLevel[key-'a'];
+}
+template <class T>
+void ChemagHashTableDictionary<T>::init(string filename)
 {
 	string line;
     ifstream fins;
@@ -44,7 +44,7 @@ void ChemagHashTableDictionary::init(string filename)
     {
         while (getline(fins, line))
         {
-            insertStringIntoHash(line);
+            insertStringIntoHash(line, *this);
         }
         fins.close();
     }
@@ -54,19 +54,21 @@ void ChemagHashTableDictionary::init(string filename)
     }
 }
 
-void ChemagHashTableDictionary::insertStringIntoHash(string word)
+
+void insertStringIntoHash(const string &word, ChemagHashTableDictionary<ChemagNode> &currentLevel)
 {
-	ChemagHashTableDictionary currentLevel = *this;
-	for(int i = 0; i < word.length; i++)
+    string wordSoFar = "";
+	for(int i = 0; i < word.length(); i++)
 	{
-		
+        
+		wordSoFar = wordSoFar + word[i];
 		ChemagNode currentNode = currentLevel.get(word[i]);
-		if (!currentNode)
+		if (currentNode.getWord() != "")
 		{
-			currentNode = ChemagNode(word[i], false);
+			currentNode = ChemagNode(wordSoFar, false);
 			currentLevel.put(word[i], currentNode);
 		}
-		if (i == word.length - 1)
+		if (i == word.length() - 1)
 		{
 			currentNode.setInDict(true);
 		}

@@ -60,5 +60,4 @@ void QuickSortedVectorDictionary::sort()
 // sorts the dictionary by calling quicksort
 {
     quickSort(wordLst, 0, wordLst.size()-1); 
-    print();
 }

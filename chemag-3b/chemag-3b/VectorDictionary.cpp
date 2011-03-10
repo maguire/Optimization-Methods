@@ -59,5 +59,7 @@ void VectorDictionary::print()
 // print the dictionary
 {
     for (int i = 0; i < wordLst.size(); i++)
-        cout << wordLst[i];
+    {
+        cout << wordLst[i] << endl;
+    }
 }

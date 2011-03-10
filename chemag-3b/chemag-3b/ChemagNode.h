@@ -21,12 +21,13 @@ public:
     ChemagNode(string word, bool inDict);
 	string getWord() const;
 	bool getInDict() const;
-	ChemagHashTableDictionary &getNextLevel() const;
+    void setInDict(bool inDict);
+	ChemagHashTableDictionary<ChemagNode> &getNextLevel();
 
 private:
 	string word;
 	bool inDict;
-	ChemagHashTableDictionary nextLevel;
+	ChemagHashTableDictionary<ChemagNode> nextLevel;
 };
 
 #endif
