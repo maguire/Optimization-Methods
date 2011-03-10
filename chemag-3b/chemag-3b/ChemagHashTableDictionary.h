@@ -2,12 +2,19 @@
   * Jie Chen * Patrick Maguire
   *
   *
-  * This file contains the interface for the Dictionary class
+  * This file contains the interface for the ChemagHashTableDictionary class
+  *
+  * This class inherits from Dictionary, the dictionary is stores as a
+  * multi-leveled tree like structure
   **/
+
+#ifndef ChemagHashTableDictionary
+#define ChemagHashTableDictionary
 
 #include <vector>
 #include <string>
 #include "Dictionary.h"
+#include "ChemagNode.h"
 
 using namespace std;
 
@@ -24,3 +31,5 @@ private:
     void init(string filename);
 	vector<ChemagNode> topLevel;
 };
+
+#endif

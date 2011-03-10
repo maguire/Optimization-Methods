@@ -42,9 +42,10 @@ Grid::Grid(string in_fd)
     fins.close();
 }
 
+
+vector<string>& Grid::operator[] (int i)
 // non-constant version. provides general access to Grid
 // elements
-vector<string>& Grid::operator[] (int i)
 {
    if (i < 0 || i >= _size)
       throw indexRangeError("Grid: invalid row index", i, _size);
@@ -52,9 +53,9 @@ vector<string>& Grid::operator[] (int i)
    return mx[i];
 }
 
+const vector<string>& Grid::operator[] (int i) const
 // constant version.  can be used with a constant object.
 // does not allow modification of a Grid element
-const vector<string>& Grid::operator[] (int i) const
 {
    if (i < 0 || i >= _size)
       throw indexRangeError("Grid: invalid row index", i, _size);

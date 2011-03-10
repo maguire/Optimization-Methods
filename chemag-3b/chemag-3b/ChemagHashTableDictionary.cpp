@@ -5,7 +5,7 @@
   * This file contains the interface for the Dictionary class
   **/
 
-#include "ChemagHashTablDictionary.h"
+#include "ChemagHashTableDictionary.h"
 
 using namespace std;
 

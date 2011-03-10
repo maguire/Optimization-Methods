@@ -2,7 +2,11 @@
   * Jie Chen * Patrick Maguire
   *
   *
-  * This file contains the interface for the Dictionary class
+  * This file contains the interface for the 
+  * QuickSortedVecotrDictionary class
+  *
+  * This class inherits from SortedVectorDictionary, 
+  * uses the selection sort algorithm
   **/
 
 #include <vector>

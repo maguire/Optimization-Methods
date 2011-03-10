@@ -1,7 +1,7 @@
-/** Project 3a Dictionary.cpp
+/** Project 3a VectorDictionary.cpp
   * Jie Chen * Patrick Maguire
   *
-  * This file contains the implementation for the Dictionary class
+  * This file contains the implementation for the VectorDictionary class
   *   -defines the public constructor
   *   -defines the lookup function
   */
@@ -10,7 +10,6 @@
 #include <iostream>
 #include "d_except.h"
 #include "VectorDictionary.h"
-
 
 VectorDictionary::VectorDictionary(string filename) : wordLst(vector<string>())
 // default public constructor for the VectorDictionary class
@@ -54,4 +53,11 @@ bool VectorDictionary::lookup(string s) const
         }
     }
     return false;
+}
+
+void VectorDictionary::print()
+// print the dictionary
+{
+    for (int i = 0; i < wordLst.size(); i++)
+        cout << wordLst[i];
 }

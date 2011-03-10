@@ -1,8 +1,10 @@
-/** Project 3b QuickSortedVecotrDictionary.h
+/** Project 3b SortedVectorDictionary.h
   * Jie Chen * Patrick Maguire
   *
-  *
-  * This file contains the interface for the Dictionary class
+  * This file contains the implementations for the 
+  * SortedVectorDictionary class
+  *   - defines binary search
+  *   - defines lookup 
   **/
 
 #include <vector>
@@ -13,9 +15,12 @@ using namespace std;
 
 SortedVectorDictionary::SortedVectorDictionary(string file) 
     : VectorDictionary(file)
+// constructor for the SortedBectorDictionary class
+// calls the constructor of its super class VectorDictionary
 {}
 
 int binarySearch(const vector<string> &lst, string word, int begin, int end) 
+// perform binary search on 'lst' looking for 'word'
 {
     if (begin > end) return -1;
     
@@ -36,6 +41,8 @@ int binarySearch(const vector<string> &lst, string word, int begin, int end)
 }
 
 bool SortedVectorDictionary::lookup(string word) const
+// look up function, calls binary search.  overrides the
+// look up function in its super class VectorDictionary
 {
     return binarySearch(wordLst, word, 0, wordLst.size() - 1) != -1;
 }

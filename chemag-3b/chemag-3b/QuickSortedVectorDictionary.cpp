@@ -18,7 +18,8 @@ using namespace std;
 
 QuickSortedVectorDictionary::QuickSortedVectorDictionary(string file) 
     : SortedVectorDictionary(file)
-// constructor for QuickSortedVectorDictionary
+// constructor for QuickSortedVectorDictionary, call the constructor
+// of SortedVectorDictionary
 {
     sort();
 }
@@ -46,7 +47,8 @@ int partition(vector<string> &unsorted, int begin, int end, int pivotIndex)
 void quickSort(vector<string> &unsorted, int begin, int end)
 // do quick sort on string vector
 {
-    if( end > begin ){
+    if( end > begin )
+    {
         int pivot = (begin + end) / 2;
         pivot = partition(unsorted, begin, end, pivot);
         quickSort(unsorted, begin, pivot - 1);
@@ -55,8 +57,8 @@ void quickSort(vector<string> &unsorted, int begin, int end)
 }
 
 void QuickSortedVectorDictionary::sort()
+// sorts the dictionary by calling quicksort
 {
     quickSort(wordLst, 0, wordLst.size()-1); 
-    for (int i = 0; i < wordLst.size() ; i++)
-        cout << wordLst[i] << endl ;
+    print();
 }

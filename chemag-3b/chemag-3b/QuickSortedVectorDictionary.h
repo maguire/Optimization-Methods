@@ -4,6 +4,9 @@
   *
   * This file contains the interface for the QuickSortedVectorDictionary
   * class
+  *   
+  * This class is inherits from SortedVectorDictionary,
+  * uses the quick sort algorithm
   **/
 
 #include <vector>

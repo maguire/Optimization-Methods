@@ -1,10 +1,13 @@
-
 /** Project 3b SelectionSortedVectorDictionary.h
   * Jie Chen * Patrick Maguire
   *
   *
   * This file contains the implementation for the 
   * SelectionSortedVectorDictionary class
+  *   - defines selectionSort
+  *   - defines sort
+  *   - defines the public constructor
+  *
   **/
 
 #include <iostream>
@@ -17,7 +20,8 @@ using namespace std;
 
 SelectionSortedVectorDictionary::SelectionSortedVectorDictionary(string file) 
     : SortedVectorDictionary(file)
-// constructor for the class
+// constructor for the class, use constructor of its super class
+// SortedVectorDictionary
 {
     sort();
 }
@@ -40,8 +44,8 @@ void selectionSort(vector<string> &unsorted)
 }
 
 void SelectionSortedVectorDictionary::sort()
+// sort the dictionary
 {
     selectionSort(wordLst); 
-    for (int i = 0; i < wordLst.size(); i++)
-        cout << wordLst[i];
+    print();
 }

@@ -18,7 +18,7 @@ void checkSurrounding(int rowIndex, int colIndex,
                       const Grid &grid,
                       const Dictionary &dict,
                       const int deltaX, const int deltaY, 
-		      const int minWordLength = 5)
+		              const int minWordLength = 5)
 // search for words in the direction given by delta x and y
 // starting from the location rowIndex and colIndex
 // for seach string longer than minWordLength check with the dictionary
@@ -93,6 +93,5 @@ void testSearch()
 int main()
 // the main function
 {
-//   QuickSortedVectorDictionary();
     testSearch();
 }
