@@ -134,7 +134,7 @@ ValueType board::getCell(int i, int j)
 void board::setCell(int i, int j, int val)
 {
     if (hasConflict(i, j, val))
-	throw rangeError("conflict detected");
+	exit(0);// maybe we want to throw exception instead?
 
     value[i][j] = val;
     updateConflicts(i, j, val, true);
@@ -183,9 +183,9 @@ void board::print()
 template <typename T>
 static void printMx(const matrix<T> &mx)
 {
-    for (int i = 0; i < mx.rows(); i++)
+    for (int i = 1; i < mx.rows(); i++)
     {
-	for (int j = 0; j < mx.cols(); j++)
+	for (int j = 1; j < mx.cols(); j++)
 	{
 	    cout << mx[i][j] << ' ';
 	}
