@@ -6,6 +6,7 @@
 #include "d_except.h"
 #include <list>
 #include <fstream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -35,17 +36,19 @@ public:
     void printConflicts();
     bool isBlank(int, int);
     ValueType getCell(int, int);
+    void setCell(int i, int j, int val);
+    bool hasConflict(int i, int j, int val);
       
 private:
-    void updateConflicts(int i, int j, int val, int con);
+    void updateConflicts(int i, int j, int val, bool con);
 
     // The following matrices go from 1 to BoardSize in each
     // dimension.  I.e. they are each (BoardSize+1) X (BoardSize+1)
 
     matrix<ValueType> value;
-    matrix<ValueType> rowConflict;
-    matrix<ValueType> colConflict;
-    matrix<ValueType> squareConflict;
+    matrix<bool> rowConflict;
+    matrix<bool> colConflict;
+    matrix<bool> squareConflict;
 };
 
 board::board(int sqSize)
@@ -58,13 +61,6 @@ board::board(int sqSize)
 
 void board::clear()
 {
-}
-
-void updateConflicts(int i, int j, int val, bool con)
-{
-    rowConflict[i][val] = con;
-    colConflict[j][val] = con;
-    squareConflict[squareNumber(i, j)][val] = con;
 }
 
 void board::initialize(ifstream &fin)
@@ -99,6 +95,14 @@ int squareNumber(int i, int j)
     return SquareSize * ((i-1)/SquareSize) + (j-1)/SquareSize + 1;
 }
 
+
+void board::updateConflicts(int i, int j, int val, bool con)
+{
+    rowConflict[i][val] = con;
+    colConflict[j][val] = con;
+    squareConflict[squareNumber(i, j)][val] = con;
+}
+
 ostream &operator<<(ostream &ostr, vector<int> &v)
 // Overloaded output operator for vector class.
 {
@@ -106,6 +110,15 @@ ostream &operator<<(ostream &ostr, vector<int> &v)
 	ostr << v[i] << " ";
     ostr << endl;
     return ostr;
+}
+
+bool board::hasConflict(int i, int j, int val)
+{
+    // maybe there should be a check to make sure the 
+    // cell is empty?
+
+    return rowConflict[i][val] || colConflict[j][val] ||
+	squareConflict[squareNumber(i,j)][val];
 }
 
 ValueType board::getCell(int i, int j)
@@ -116,6 +129,15 @@ ValueType board::getCell(int i, int j)
 	return value[i][j];
     else
 	throw rangeError("bad value in getCell");
+}
+
+void board::setCell(int i, int j, int val)
+{
+    if (hasConflict(i, j, val))
+	throw rangeError("conflict detected");
+
+    value[i][j] = val;
+    updateConflicts(i, j, val, true);
 }
 
 bool board::isBlank(int i, int j)
@@ -158,9 +180,28 @@ void board::print()
     cout << endl;
 }
 
-void printConflicts()
+template <typename T>
+static void printMx(const matrix<T> &mx)
 {
-    
+    for (int i = 0; i < mx.rows(); i++)
+    {
+	for (int j = 0; j < mx.cols(); j++)
+	{
+	    cout << mx[i][j] << ' ';
+	}
+	cout << endl;
+    }
+    cout << endl;
+}
+
+void board::printConflicts()
+{
+    cout << "row conflicts" << endl;
+    printMx(rowConflict);
+    cout << endl << "column conflicts" << endl;
+    printMx(colConflict);
+    cout << endl << "square conflicts" << endl;
+    printMx(squareConflict);
 }
 
 int main()
