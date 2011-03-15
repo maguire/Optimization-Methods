@@ -30,6 +30,7 @@ class board
 {
 public:
     board(int);
+    void clearCell(int i, int j);
     void clear();
     void initialize(ifstream &fin);
     void print();
@@ -38,6 +39,7 @@ public:
     ValueType getCell(int, int);
     void setCell(int i, int j, int val);
     bool hasConflict(int i, int j, int val);
+    bool isSolved();
       
 private:
     void updateConflicts(int i, int j, int val, bool con);
@@ -59,8 +61,34 @@ board::board(int sqSize)
 {
 }
 
+void board::clearCell(int i, int j)
+{
+    updateConflicts(i, j, value[i][j], false);
+    value[i][j] = 0;
+}
+
 void board::clear()
 {
+    for (int i = 1; i < value.rows(); i++)
+    {
+	for (int j = 1; j < value.cols(); j++)
+	{
+	    clearCell(i,j);
+	}
+    }
+}
+
+bool board::isSolved()
+{
+    for (int i = 1; i < value.rows(); i++)
+    {
+	for (int j = 1; j < value.cols(); j++)
+	{
+	    if (value[i][j] == 0) return false;
+	}
+    }
+    print();    
+    return true;
 }
 
 void board::initialize(ifstream &fin)
