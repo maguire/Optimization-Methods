@@ -1,3 +1,9 @@
+/** Patrick Maguire & Jie Chen 
+ *  Project 4a
+ *  Entry point and board class for sudoku
+ */
+
+
 // Declarations and functions for project #4
 
 #include <iostream>
@@ -62,30 +68,33 @@ board::board(int sqSize)
 }
 
 void board::clearCell(int i, int j)
+// remove all possible conflicts and set the cell value to 0
 {
     updateConflicts(i, j, value[i][j], false);
     value[i][j] = 0;
 }
 
 void board::clear()
+// clear the entire board
 {
     for (int i = 1; i < value.rows(); i++)
     {
-	for (int j = 1; j < value.cols(); j++)
-	{
-	    clearCell(i,j);
-	}
+        for (int j = 1; j < value.cols(); j++)
+        {
+            clearCell(i,j);
+        }
     }
 }
 
 bool board::isSolved()
+// check if the board is solved(not necessarily correct)and print 
 {
     for (int i = 1; i < value.rows(); i++)
     {
-	for (int j = 1; j < value.cols(); j++)
-	{
-	    if (value[i][j] == 0) return false;
-	}
+        for (int j = 1; j < value.cols(); j++)
+        {
+            if (value[i][j] == 0) return false;
+        }
     }
     print();    
     return true;
@@ -99,17 +108,20 @@ void board::initialize(ifstream &fin)
     clear();
     for (int i = 1; i <= BoardSize; i++)
     {
-	for (int j = 1; j <= BoardSize; j++)
-	{
-	    fin >> ch;
+        for (int j = 1; j <= BoardSize; j++)
+        {
+            fin >> ch;
 
-	    // If the read char is not Blank
-	    if (ch != '.')
-	    {
-		setCell(i,j,ch-'0');   // Convert char to int
-		updateConflicts(i, j, ch-'0', true);
-	    }
-	}
+            // If the read char is not Blank
+            if (ch != '.')
+            {
+                
+                if (hasConflict(i, j, ch-'0'))
+                    throw rangeError("conflict on initialization");
+                setCell(i,j,ch-'0');   // Convert char to int
+                updateConflicts(i, j, ch-'0', true);
+            }
+        }
     }
 }
 
@@ -125,6 +137,7 @@ int squareNumber(int i, int j)
 
 
 void board::updateConflicts(int i, int j, int val, bool con)
+// update possible row, column, and square conflicts
 {
     rowConflict[i][val] = con;
     colConflict[j][val] = con;
@@ -141,12 +154,10 @@ ostream &operator<<(ostream &ostr, vector<int> &v)
 }
 
 bool board::hasConflict(int i, int j, int val)
+// check if this board has a conflict at the given position and with val
 {
-    // maybe there should be a check to make sure the 
-    // cell is empty?
-
     return rowConflict[i][val] || colConflict[j][val] ||
-	squareConflict[squareNumber(i,j)][val];
+        squareConflict[squareNumber(i,j)][val];
 }
 
 ValueType board::getCell(int i, int j)
@@ -160,12 +171,9 @@ ValueType board::getCell(int i, int j)
 }
 
 void board::setCell(int i, int j, int val)
+// set the value of the cell
 {
-    if (hasConflict(i, j, val))
-	exit(0);// maybe we want to throw exception instead?
-
     value[i][j] = val;
-    updateConflicts(i, j, val, true);
 }
 
 bool board::isBlank(int i, int j)
@@ -210,19 +218,21 @@ void board::print()
 
 template <typename T>
 static void printMx(const matrix<T> &mx)
+// print the given matrix
 {
     for (int i = 1; i < mx.rows(); i++)
     {
-	for (int j = 1; j < mx.cols(); j++)
-	{
-	    cout << mx[i][j] << ' ';
-	}
-	cout << endl;
+        for (int j = 1; j < mx.cols(); j++)
+        {
+            cout << mx[i][j] << ' ';
+        }
+        cout << endl;
     }
     cout << endl;
 }
 
 void board::printConflicts()
+// print all conflicts of this board
 {
     cout << "row conflicts" << endl;
     printMx(rowConflict);
@@ -255,12 +265,13 @@ int main()
 	    b1.initialize(fin);
 	    b1.print();
 	    b1.printConflicts();
+        cout << "is the board solved?: " << b1.isSolved() << endl;
 	}
     }
     catch  (indexRangeError &ex)
     {
-	cout << ex.what() << endl;
-	exit(1);
+	    cout << ex.what() << endl;
+	    exit(1);
     }
 }
 
