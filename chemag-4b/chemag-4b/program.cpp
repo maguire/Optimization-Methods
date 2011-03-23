@@ -60,34 +60,33 @@ private:
     matrix<bool> squareConflict;
 };
 
-int board::solve(int x = 1, int y = 1, int count = 0)
+int board::solve(int i = 1, int j = 1, int count = 0)
 // solve the board and return the number of recursive calls made
 {
-    for (int i = x; i < value.rows(); i++)
+    if (i == 0)
+	return count;
+    
+    // find an empty cell
+    if (value[i][j] == 0)
     {
-	for (int j = y; j < value.cols(); j++)
+	for (int val = 1; val < 10; val++)
 	{
-	    if (value[i][j] == 0)
+	    // try only value that can be set
+	    if (setCell(i, j, val))
 	    {
-		for (int v = 1; v < 10; v++)
-		{
+		int tmp = solve((i + (j+1)/value.cols()) % value.rows(),
+				(j+1) % value.cols(), count + 1);
+		if (tmp == -1)
 		    clearCell(i, j);
-		    if (setCell(i, j, v))
-		    {
-			int tmp = solve(i, j, count+1);
-			if (tmp == -1)
-			    continue;
-			else
-			    return tmp;
-		    }
-		}
-		return -1;
+		else
+		    return tmp;
 	    }
 	}
+	return -1;
     }
-    return count;
-}
-    
+    return solve((i + (j+1)/value.cols()) % value.rows(),
+		 (j+1) % value.cols(), count + 1);
+}    
 
 board::board(int sqSize)
     : value(BoardSize+1,BoardSize+1), rowConflict(BoardSize+1,BoardSize+1),
