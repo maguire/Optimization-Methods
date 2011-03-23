@@ -43,9 +43,10 @@ public:
     void printConflicts();
     bool isBlank(int, int);
     ValueType getCell(int, int);
-    void setCell(int i, int j, int val);
+    bool setCell(int i, int j, int val);
     bool hasConflict(int i, int j, int val);
     bool isSolved();
+    int solve(int i, int j, int count);
       
 private:
     void updateConflicts(int i, int j, int val, bool con);
@@ -58,6 +59,35 @@ private:
     matrix<bool> colConflict;
     matrix<bool> squareConflict;
 };
+
+int board::solve(int x = 1, int y = 1, int count = 0)
+// solve the board and return the number of recursive calls made
+{
+    for (int i = x; i < value.rows(); i++)
+    {
+	for (int j = y; j < value.cols(); j++)
+	{
+	    if (value[i][j] == 0)
+	    {
+		for (int v = 1; v < 10; v++)
+		{
+		    clearCell(i, j);
+		    if (setCell(i, j, v))
+		    {
+			int tmp = solve(i, j, count+1);
+			if (tmp == -1)
+			    continue;
+			else
+			    return tmp;
+		    }
+		}
+		return -1;
+	    }
+	}
+    }
+    return count;
+}
+    
 
 board::board(int sqSize)
     : value(BoardSize+1,BoardSize+1), rowConflict(BoardSize+1,BoardSize+1),
@@ -170,10 +200,17 @@ ValueType board::getCell(int i, int j)
 	throw rangeError("bad value in getCell");
 }
 
-void board::setCell(int i, int j, int val)
-// set the value of the cell
+bool board::setCell(int i, int j, int val)
+// set the value of the cell, return true if value is set
+// false otherwise
 {
-    value[i][j] = val;
+    if (!hasConflict(i, j, val))
+    {
+	value[i][j] = val;
+	updateConflicts(i, j, val, true);
+	return true;
+    }
+    return false;
 }
 
 bool board::isBlank(int i, int j)
@@ -264,8 +301,10 @@ int main()
 	{
 	    b1.initialize(fin);
 	    b1.print();
-	    b1.printConflicts();
-        cout << "is the board solved?: " << b1.isSolved() << endl;
+	    int count = b1.solve();
+	    b1.print();
+	    cout << "number of calls: " << count << endl;
+	    exit(0);
 	}
     }
     catch  (indexRangeError &ex)
