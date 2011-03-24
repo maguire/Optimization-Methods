@@ -330,7 +330,7 @@ int main()
 	    cout << "solved?: " << b1.isSolved() << endl;
 	    
 	}
-	cout << "average number of calls: " << TOTAL_CALLS / num_round;
+	cout << "average number of calls: " << TOTAL_CALLS / num_round << endl;
     }
     catch  (indexRangeError &ex)
     {
