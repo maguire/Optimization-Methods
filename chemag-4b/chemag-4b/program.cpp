@@ -46,10 +46,11 @@ public:
     bool setCell(int i, int j, int val);
     bool hasConflict(int i, int j, int val);
     bool isSolved();
-    int solve(int i, int j, int count);
+    void solve(int i, int j, int count);
       
 private:
     void updateConflicts(int i, int j, int val, bool con);
+    void next(int &row, int &col, int max, int count);
 
     // The following matrices go from 1 to BoardSize in each
     // dimension.  I.e. they are each (BoardSize+1) X (BoardSize+1)
@@ -60,32 +61,36 @@ private:
     matrix<bool> squareConflict;
 };
 
-int board::solve(int i = 1, int j = 1, int count = 0)
+void board::next(int &row, int &col, int max, int count)
+// helper for solve
+{
+    if (col < max - 1)
+	solve(row, col+1, count+1);
+    else
+	solve(row+1, 1, count+1);
+}
+
+void board::solve(int i = 1, int j = 1, int count = 0)
 // solve the board and return the number of recursive calls made
 {
-    if (i == 0)
-	return count;
-    
-    // find an empty cell
-    if (value[i][j] == 0)
+    if (i > value.rows() - 1)
+	cout << "number of calls " << count << endl;
+
+    if (value[i][j] != 0)
+    {
+	next(i, j, value.rows(), count);
+    }
+    else
     {
 	for (int val = 1; val < 10; val++)
 	{
-	    // try only value that can be set
 	    if (setCell(i, j, val))
 	    {
-		int tmp = solve((i + (j+1)/value.cols()) % value.rows(),
-				(j+1) % value.cols(), count + 1);
-		if (tmp == -1)
-		    clearCell(i, j);
-		else
-		    return tmp;
-	    }
+		next(i, j, value.rows(), count);       
+	    }	
 	}
-	return -1;
     }
-    return solve((i + (j+1)/value.cols()) % value.rows(),
-		 (j+1) % value.cols(), count + 1);
+    clearCell(i, j);
 }    
 
 board::board(int sqSize)
@@ -300,16 +305,20 @@ int main()
 	{
 	    b1.initialize(fin);
 	    b1.print();
-	    int count = b1.solve();
+	    b1.solve();
 	    b1.print();
-	    cout << "number of calls: " << count << endl;
-	    exit(0);
+	    //exit(0);
 	}
     }
     catch  (indexRangeError &ex)
     {
 	    cout << ex.what() << endl;
 	    exit(1);
+    }
+    catch (rangeError &x)
+    {
+	cout << x.what() << endl;
+	exit(1);
     }
 }
 
