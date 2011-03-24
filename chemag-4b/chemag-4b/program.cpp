@@ -31,6 +31,8 @@ const int MaxValue = 9;
 
 int numSolutions = 0;
 
+int CALL_COUNT = 0;
+
 class board
 // Stores the entire Sudoku board
 {
@@ -43,14 +45,14 @@ public:
     void printConflicts();
     bool isBlank(int, int);
     ValueType getCell(int, int);
-    bool setCell(int i, int j, int val);
+    void setCell(int i, int j, int val);
     bool hasConflict(int i, int j, int val);
     bool isSolved();
-    void solve(int i, int j, int count);
+    void solve(int i, int j);
       
 private:
     void updateConflicts(int i, int j, int val, bool con);
-    void next(int &row, int &col, int max, int count);
+    void next(int &row, int &col, int max);
 
     // The following matrices go from 1 to BoardSize in each
     // dimension.  I.e. they are each (BoardSize+1) X (BoardSize+1)
@@ -61,37 +63,47 @@ private:
     matrix<bool> squareConflict;
 };
 
-void board::next(int &row, int &col, int max, int count)
-// helper for solve
+void board::next(int &row, int &col, int max)
+// helper for solve, should not be called outside of 
+// solve
 {
     if (col < max - 1)
-	solve(row, col+1, count+1);
+	solve(row, col+1);
     else
-	solve(row+1, 1, count+1);
+	solve(row+1, 1);
 }
 
-void board::solve(int i = 1, int j = 1, int count = 0)
+void board::solve(int i = 1, int j = 1)
 // solve the board and return the number of recursive calls made
 {
-    if (i > value.rows() - 1)
-	cout << "number of calls " << count << endl;
+    CALL_COUNT++;
+    if (i >= BoardSize)
+    {
+	print();
+    }
 
     if (value[i][j] != 0)
     {
-	next(i, j, value.rows(), count);
+	next(i, j, value.rows());
     }
     else
     {
-	for (int val = 1; val < 10; val++)
+	for (int val = MinValue; val <= MaxValue; val++)
 	{
-	    if (setCell(i, j, val))
+	    if (!hasConflict(i, j, val))
 	    {
-		next(i, j, value.rows(), count);       
+		char c;
+		cout << "setting " << val << " at " << i << ", " << j << endl;
+		cin.get(c);
+		setCell(i, j, val);
+		print();
+		updateConflicts(i, j, val, true);
+		next(i, j, value.rows());       
 	    }	
 	}
+	clearCell(i, j);
     }
-    clearCell(i, j);
-}    
+}
 
 board::board(int sqSize)
     : value(BoardSize+1,BoardSize+1), rowConflict(BoardSize+1,BoardSize+1),
@@ -104,8 +116,12 @@ board::board(int sqSize)
 void board::clearCell(int i, int j)
 // remove all possible conflicts and set the cell value to 0
 {
+    cout << "clearing " << value[i][j] << " at " << i << ", " << j << endl;
+    char c;
+    cin.get(c);
     updateConflicts(i, j, value[i][j], false);
     value[i][j] = 0;
+    print();
 }
 
 void board::clear()
@@ -115,7 +131,11 @@ void board::clear()
     {
         for (int j = 1; j < value.cols(); j++)
         {
-            clearCell(i,j);
+	    value[i][j] = 0;
+	    for (int x = MinValue; x <= MaxValue; x++)
+	    {
+		updateConflicts(i, j, x, false);
+	    }
         }
     }
 }
@@ -139,7 +159,7 @@ void board::initialize(ifstream &fin)
 {
     char ch;
 
-    clear();
+    //clear();
     for (int i = 1; i <= BoardSize; i++)
     {
         for (int j = 1; j <= BoardSize; j++)
@@ -151,9 +171,8 @@ void board::initialize(ifstream &fin)
             {
                 
                 if (hasConflict(i, j, ch-'0'))
-                    throw rangeError("conflict on initialization");
-                setCell(i,j,ch-'0');   // Convert char to int
-                updateConflicts(i, j, ch-'0', true);
+		    throw rangeError("conflict on initialization");
+		setCell(i,j,ch-'0');   // Convert char to int
             }
         }
     }
@@ -204,17 +223,11 @@ ValueType board::getCell(int i, int j)
 	throw rangeError("bad value in getCell");
 }
 
-bool board::setCell(int i, int j, int val)
+void board::setCell(int i, int j, int val)
 // set the value of the cell, return true if value is set
 // false otherwise
 {
-    if (!hasConflict(i, j, val))
-    {
-	value[i][j] = val;
-	updateConflicts(i, j, val, true);
-	return true;
-    }
-    return false;
+    value[i][j] = val;
 }
 
 bool board::isBlank(int i, int j)
@@ -222,6 +235,8 @@ bool board::isBlank(int i, int j)
 {
     if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
 	throw rangeError("bad value in setCell");
+    else
+	return value[i][j] == Blank;
 }
 
 void board::print()
@@ -300,14 +315,13 @@ int main()
     try
     {
 	board b1(SquareSize);
-
+	
 	while (fin && fin.peek() != 'Z')
 	{
 	    b1.initialize(fin);
 	    b1.print();
 	    b1.solve();
-	    b1.print();
-	    //exit(0);
+	    exit(0);
 	}
     }
     catch  (indexRangeError &ex)
