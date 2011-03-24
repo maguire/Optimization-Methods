@@ -67,7 +67,7 @@ private:
 
 void board::next(int &row, int &col, int max)
 // helper for solve, should not be called outside of 
-// solve
+// solve EVER!!!
 {
     if (col < max - 1)
 	solve(row, col+1);
@@ -78,22 +78,28 @@ void board::next(int &row, int &col, int max)
 void board::solve(int i = 1, int j = 1)
 // solve the board and return the number of recursive calls made
 {
-    CALL_COUNT++;
+    CALL_COUNT++; // increase the call count each time solve is called
+    
+    // if the row number is greater than the board size
+    // then we are done unwind
     if (i > BoardSize)
     {
-	DONE = true;
+	DONE = true; // set DONE so we can unwind safety
 	return;
     }
 
-    if (value[i][j] != 0)
+    // if it is not an empty cell move on
+    if (!isBlank(i, j))
     {
 	next(i, j, value.rows());
 	if (DONE) return;
     }
     else
     {
+	// try all possible values min to max
 	for (int val = MinValue; val <= MaxValue; val++)
 	{
+	    // set only the ones that doesn't produce a conflict
 	    if (!hasConflict(i, j, val))
 	    {		
 		setCell(i, j, val);
