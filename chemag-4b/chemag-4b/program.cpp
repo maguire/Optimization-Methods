@@ -32,6 +32,8 @@ const int MaxValue = 9;
 int numSolutions = 0;
 
 int CALL_COUNT = 0;
+bool DONE = false;
+long TOTAL_CALLS = 0;
 
 class board
 // Stores the entire Sudoku board
@@ -77,31 +79,30 @@ void board::solve(int i = 1, int j = 1)
 // solve the board and return the number of recursive calls made
 {
     CALL_COUNT++;
-    if (i >= BoardSize)
+    if (i > BoardSize)
     {
-	print();
+	DONE = true;
+	return;
     }
 
     if (value[i][j] != 0)
     {
 	next(i, j, value.rows());
+	if (DONE) return;
     }
     else
     {
 	for (int val = MinValue; val <= MaxValue; val++)
 	{
 	    if (!hasConflict(i, j, val))
-	    {
-		char c;
-		cout << "setting " << val << " at " << i << ", " << j << endl;
-		cin.get(c);
+	    {		
 		setCell(i, j, val);
-		print();
 		updateConflicts(i, j, val, true);
-		next(i, j, value.rows());       
+		next(i, j, value.rows());
+		if (DONE) return;
+		clearCell(i, j);
 	    }	
 	}
-	clearCell(i, j);
     }
 }
 
@@ -116,12 +117,8 @@ board::board(int sqSize)
 void board::clearCell(int i, int j)
 // remove all possible conflicts and set the cell value to 0
 {
-    cout << "clearing " << value[i][j] << " at " << i << ", " << j << endl;
-    char c;
-    cin.get(c);
     updateConflicts(i, j, value[i][j], false);
     value[i][j] = 0;
-    print();
 }
 
 void board::clear()
@@ -150,6 +147,7 @@ bool board::isSolved()
             if (value[i][j] == 0) return false;
         }
     }
+    cout << endl;
     print();    
     return true;
 }
@@ -159,7 +157,7 @@ void board::initialize(ifstream &fin)
 {
     char ch;
 
-    //clear();
+    clear();
     for (int i = 1; i <= BoardSize; i++)
     {
         for (int j = 1; j <= BoardSize; j++)
@@ -173,7 +171,8 @@ void board::initialize(ifstream &fin)
                 if (hasConflict(i, j, ch-'0'))
 		    throw rangeError("conflict on initialization");
 		setCell(i,j,ch-'0');   // Convert char to int
-            }
+		updateConflicts(i, j, ch-'0', true);
+	    }
         }
     }
 }
@@ -316,13 +315,22 @@ int main()
     {
 	board b1(SquareSize);
 	
+	int num_round = 0;
 	while (fin && fin.peek() != 'Z')
 	{
-	    b1.initialize(fin);
+	    num_round++;
+	    DONE = false;
+	    b1.initialize(fin);	    
+	    cout << endl << "new board: " << endl;
 	    b1.print();
 	    b1.solve();
-	    exit(0);
+	    cout << "number of calls: " << CALL_COUNT << endl;
+	    TOTAL_CALLS += CALL_COUNT;
+	    CALL_COUNT = 0;
+	    cout << "solved?: " << b1.isSolved() << endl;
+	    
 	}
+	cout << "average number of calls: " << TOTAL_CALLS / num_round;
     }
     catch  (indexRangeError &ex)
     {
