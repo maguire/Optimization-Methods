@@ -31,8 +31,6 @@ const int MaxValue = 9;
 
 int numSolutions = 0;
 
-int CALL_COUNT = 0;
-bool DONE = false;
 long TOTAL_CALLS = 0;
 
 class board
@@ -51,10 +49,13 @@ public:
     bool hasConflict(int i, int j, int val);
     bool isSolved();
     void solve(int i, int j);
+    int getCount() { return call_count; };
       
 private:
     void updateConflicts(int i, int j, int val, bool con);
     void next(int &row, int &col, int max);
+    int call_count;
+    bool done;
 
     // The following matrices go from 1 to BoardSize in each
     // dimension.  I.e. they are each (BoardSize+1) X (BoardSize+1)
@@ -69,7 +70,7 @@ void board::next(int &row, int &col, int max)
 // helper for solve, should not be called outside of 
 // solve EVER!!!
 {
-    if (col < max - 1)
+    if (col < max)
 	solve(row, col+1);
     else
 	solve(row+1, 1);
@@ -78,21 +79,21 @@ void board::next(int &row, int &col, int max)
 void board::solve(int i = 1, int j = 1)
 // solve the board and return the number of recursive calls made
 {
-    CALL_COUNT++; // increase the call count each time solve is called
+    call_count++; // increase the call count each time solve is called
     
     // if the row number is greater than the board size
     // then we are done unwind
     if (i > BoardSize)
     {
-	DONE = true; // set DONE so we can unwind safety
+	done = true; // set DONE so we can unwind safety
 	return;
     }
 
     // if it is not an empty cell move on
     if (!isBlank(i, j))
     {
-	next(i, j, value.rows());
-	if (DONE) return;
+	next(i, j, BoardSize);
+	if (done) return;
     }
     else
     {
@@ -104,8 +105,8 @@ void board::solve(int i = 1, int j = 1)
 	    {		
 		setCell(i, j, val);
 		updateConflicts(i, j, val, true);
-		next(i, j, value.rows());
-		if (DONE) return;
+		next(i, j, BoardSize);
+		if (done) return;
 		clearCell(i, j);
 	    }	
 	}
@@ -162,7 +163,10 @@ void board::initialize(ifstream &fin)
 // Read a Sudoku board from the input file.
 {
     char ch;
-
+    
+    call_count = 0;
+    done = false;
+        
     clear();
     for (int i = 1; i <= BoardSize; i++)
     {
@@ -325,14 +329,12 @@ int main()
 	while (fin && fin.peek() != 'Z')
 	{
 	    num_round++;
-	    DONE = false;
 	    b1.initialize(fin);	    
 	    cout << endl << "new board: " << endl;
 	    b1.print();
 	    b1.solve();
-	    cout << "number of calls: " << CALL_COUNT << endl;
-	    TOTAL_CALLS += CALL_COUNT;
-	    CALL_COUNT = 0;
+	    cout << "number of calls: " << b1.getCount() << endl;
+        TOTAL_CALLS += b1.getCount();
 	    cout << "solved?: " << b1.isSolved() << endl;
 	    
 	}
