@@ -241,7 +241,7 @@ bool board::isBlank(int i, int j)
     if (i < 1 || i > BoardSize || j < 1 || j > BoardSize)
 	throw rangeError("bad value in setCell");
     else
-	return value[i][j] == Blank;
+	return value[i][j] == 0;
 }
 
 void board::print()
