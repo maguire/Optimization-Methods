@@ -11,6 +11,25 @@
 
 using namespace std;
 
+list<int> getNeighbors(int id, graph &g);
+void findPathRecursive(int srcId, int dstId, graph &g);
+void findPathNonRecursive(int srcId, int dstId, graph &g);
+
+list<int> getNeighbors(int id, graph &g)
+{
+
+}
+
+void findPathRecurisve(int curId, int dstId, graph &g)
+{
+    node n = g.getNode(curId);
+    n.visit();
+    n.mark();
+
+    
+}
+
+
 class maze
 {
    public:
@@ -132,38 +151,25 @@ void maze::mapMazeToGraph(graph &g)
     {
         for(int j = 0; j < value.cols(); j++)
         {
-            if (value[i][j])
+            if (isLegal(i, j))
             {
                 int n = g.addNode();
-                setMap(i,j,n); 
-                if (i != 0 && value[i-1][j])
+                setMap(i,j,n);
+		// only check above and to the left
+		// since nodes down and to the right
+		// have not been created
+                if (i != 0 && isLega(i-1, j))
                 {
                    g.addEdge(n, getMap(i-1,j)); 
                 }
-                if (i != value.rows() - 1 && value[i+1][j])
+		if (j != 0 && isLegal(i, j-1))
                 {
-                   g.addEdge(n, getMap(i+1,j)); 
-                }
-                if (j != 0 && value[i][j-1])
-                {
-                   g.addEdge(n, getMap(i,j-1)); 
-                }
-                if (j != value.cols() - 1 && value[i][j+1])
-                {
-                   g.addEdge(n, getMap(i,j+1)); 
+                   g.addEdge(n, getMap(i,j-1));
                 }
             }
-           
         }
-
     }
 }
-
-void findPathRecursive(graph &g, maze &m)
-{
-    node n = g.getNode(m.getMap(0,0));
-}
-
 
 int main()
 {
