@@ -16,7 +16,14 @@ using namespace std;
 static vector<int> getNeighbors(int id, graph &g);
 void findPathRecursive(int srcId, int dstId, graph &g, 
 		       stack<int> &path, bool &done = false);
-void findPathNonRecursive(int srcId, int dstId, graph &g);
+void findPathNonRecursive(int srcId, int dstId, graph &g,
+			  stack<int> &path, bool &done = false);
+
+void findPathNonRecursive(int srcId, int dstId, graph &g,
+			  stack<int> &path, bool &done)
+{
+    
+}
 
 static vector<int> getNeighbors(int id, graph &g)
 {
@@ -51,8 +58,6 @@ void findPathRecurisve(int curId, int dstId, graph &g,
 	lst.pop_back();
     }
 }
-
-void finPathNonRecursive(int src
 
 
 class maze
