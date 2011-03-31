@@ -75,6 +75,7 @@ class maze
 
       void mapMazeToGraph(graph &g);
 
+    void printPath(stack<int> &st);
       void findPathRecursive(graph &g);
 
    private:
@@ -92,12 +93,7 @@ void maze::findPathRecursive(graph &g)
     bool done = false;
     recursiveDfs(start, end, g, path, done);
 
-    while (!path.empty())
-    {
-        cout << path.top() << " ";
-        path.pop();
-    }
-    cout << endl;       
+    printPath(path);
 }
 
 void maze::setMap(int i, int j, int n)
@@ -216,6 +212,22 @@ void maze::mapMazeToGraph(graph &g)
     }
 }
 
+void maze::printPath(stack<int> &st)
+{
+    int top;
+    int i;
+    int j;
+
+    while (!st.empty())
+    {
+	top = st.top();
+	i = getReverseMapI(top);
+	j = getReverseMapJ(top);
+	print(numRows()-1, numCols()-1, i, j);
+	st.pop();
+    }
+}
+
 int main()
 {
    char x;
@@ -241,7 +253,6 @@ int main()
          m.mapMazeToGraph(g);
          cout << g;
          m.findPathRecursive(g);
-         m.print(m.numRows()-1, m.numCols()-1, 0, 0);
       }
       cin.get(x);
    } 
