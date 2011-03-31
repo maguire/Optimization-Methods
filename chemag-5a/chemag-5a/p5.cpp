@@ -5,29 +5,54 @@
 #include <limits.h>
 #include "d_except.h"
 #include <list>
+#include <vector>
+#include <stack>
 #include <fstream>
 #include "d_matrix.h"
 #include "graph.h"
 
 using namespace std;
 
-list<int> getNeighbors(int id, graph &g);
-void findPathRecursive(int srcId, int dstId, graph &g);
+static vector<int> getNeighbors(int id, graph &g);
+void findPathRecursive(int srcId, int dstId, graph &g, 
+		       stack<int> &path, bool &done = false);
 void findPathNonRecursive(int srcId, int dstId, graph &g);
 
-list<int> getNeighbors(int id, graph &g)
+static vector<int> getNeighbors(int id, graph &g)
 {
-
+    vector<int> lst;
+    for (int i = 0; i < g.numEdges(); i++)
+    {
+	if (!g.isMarked(i) && g.isEdge(id, i))
+	    lst.push_back(i);
+    }
+    
+    return lst;
 }
 
-void findPathRecurisve(int curId, int dstId, graph &g)
+void findPathRecurisve(int curId, int dstId, graph &g,
+		       stack<int> &path, bool &done)
 {
+    if (curId == dstId)
+    {
+	done = true;
+	path.push(curId);
+    }
+    
     node n = g.getNode(curId);
     n.visit();
     n.mark();
-
+    vector<int> lst = getNeighbors(curId, &g);
     
+    while (!lst.empty())
+    {
+	findPathRecursive(lst.back(), dstId, g);
+	if (done) path.push(curId);
+	lst.pop_back();
+    }
 }
+
+void finPathNonRecursive(int src
 
 
 class maze
