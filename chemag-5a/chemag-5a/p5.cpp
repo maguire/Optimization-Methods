@@ -29,40 +29,30 @@ vector<int> getNeighbors(int id, graph &g)
     return lst;
 }
 
-vector<int> nonRecursiveDFS(int startId, int dstId, graph &g )
+stack<int> nonRecursiveDFS(int startId, int dstId, graph &g )
 {
-    vector<int> path;
-    if( startId == dstId )
-        path.push_back(startId);
-    else
-    {
-        stack<int> nodes;
-        g.mark(startId);
-        g.visit(startId);
-        nodes.push(startId);
-        while(!nodes.empty())
-        {  
-             
-            int curId = nodes.top();
-            nodes.pop();
-            path.push_back(curId);
-            if (curId == dstId) return path;
-            vector<int> lst = getNeighbors(curId, g);
-            for(int i = 0; i < lst.size(); i++)
-            {
-                if(!g.isVisited(lst[i])) {
-                    nodes.push(lst[i]);
-                }
-            }
-        }
-    }
-    return vector<int>();
+    stack<int> st;
+    st.push(startId);
 
+    while (!st.empty())
+    {
+	int top = st.top();
+	st.pop();
+	g.visit(top);
+	g.mark(top);
+	if (top == dstId) break;
+	vector<int> lst = getNeighbors(top, g);
+	for (int i = 0; i < lst.size(); i++)
+	{
+	    if (!g.isVisited(lst[i]))
+		st.push(lst[i]);
+	}
+    }
 }
 
 
 void recursiveDFS(int curId, int dstId, graph &g,
-		        stack<int> &path, bool &done)
+		  stack<int> &path, bool &done)
 {
     if (curId == dstId)
     {
@@ -94,31 +84,33 @@ void recursiveDFS(int curId, int dstId, graph &g,
 
 class maze
 {
-   public:
-      maze(ifstream &fin);
+public:
+    maze(ifstream &fin);
 
-      int numRows(){return rows;};
-      int numCols(){return cols;};
+    int numRows(){return rows;};
+    int numCols(){return cols;};
 
-      void print(int,int,int,int);
-      bool isLegal(int i, int j);
+    void print(int,int,int,int);
+    bool isLegal(int i, int j);
 
-      void setMap(int i, int j, int n);
-      int getMap(int i, int j) const;
-      int getReverseMapI(int n) const;
-      int getReverseMapJ(int n) const;
+    void setMap(int i, int j, int n);
+    int getMap(int i, int j) const;
+    int getReverseMapI(int n) const;
+    int getReverseMapJ(int n) const;
 
-      void mapMazeToGraph(graph &g);
+    void mapMazeToGraph(graph &g);
 
     void printPath(stack<int> &st);
-      void findPathRecursive(graph &g);
-      void findPathNonRecursive(graph &g);
+    void findPathRecursive(graph &g);
+    void findPathNonRecursive(graph &g);
 
-   private:
-      int rows; // number of rows in the maze
-      int cols; // number of columns in the maze
-      matrix<int> map;
-      matrix<bool> value;
+private:
+    int rows; // number of rows in the maze
+    int cols; // number of columns in the maze
+    matrix<int> map;
+    vector<int> nMapi;
+    vector<int> nMapj;
+    matrix<bool> value;
 };
 
 void maze::findPathNonRecursive(graph &g)
@@ -127,13 +119,9 @@ void maze::findPathNonRecursive(graph &g)
     g.clearMark();
     int start = getMap(0,0);
     int end = getMap(numRows()-1, numCols()-1);
-    vector<int> path = nonRecursiveDFS(start, end, g);
+    stack<int> path = nonRecursiveDFS(start, end, g);
     
-    for( int i =0; i < path.size(); i++)
-    {
-        cout << path[i] << " ";
-    }
-    cout << endl;       
+    printPath(path);
 }
 void maze::findPathRecursive(graph &g)
 {
@@ -152,6 +140,8 @@ void maze::setMap(int i, int j, int n)
 // Set mapping from maze cell (i,j) to graph node n. 
 {
     map[i][j] = n;
+    nMapi[n] = i;
+    nMapj[n] = j;
 }
 
 int maze ::getMap(int i, int j) const
@@ -163,78 +153,80 @@ int maze ::getMap(int i, int j) const
 int maze ::getReverseMapI(int n) const
 // Return reverse mapping of node n to it's maze i value.
 {
-    return n % rows;
+    return nMapi[n];
 }
 
 int maze ::getReverseMapJ(int n) const
 // Return reverse mapping of node n to it's maze j value.
 {
-    return n % cols;
+    return nMapj[n];
 }
 
 maze::maze(ifstream &fin)
 // Initializes a maze by reading values from fin.  Assumes that the
 // number of rows and columns indicated in the file are correct.
 {
-   fin >> rows;
-   fin >> cols;
+    fin >> rows;
+    fin >> cols;
 
-   char x;
+    char x;
 
-   value.resize(rows,cols);
-   for (int i = 0; i <= rows-1; i++)
-      for (int j = 0; j <= cols-1; j++)
-      {
-	 fin >> x;
-	 if (x == 'O')
-            value[i][j] = true;
-	 else
-	    value[i][j] = false;
-      }
+    value.resize(rows,cols);
+    for (int i = 0; i <= rows-1; i++)
+	for (int j = 0; j <= cols-1; j++)
+	{
+	    fin >> x;
+	    if (x == 'O')
+		value[i][j] = true;
+	    else
+		value[i][j] = false;
+	}
 
-   map.resize(rows,cols);
+    map.resize(rows,cols);
+    nMapi.resize(rows*cols);
+    nMapj.resize(rows*cols);
 }
 
 void maze::print(int goalI, int goalJ, int currI, int currJ)
 // Print out a maze, with the goal and current cells marked on the
 // board.
 {
-   cout << endl;
+    cout << endl;
 
-   if (goalI < 0 || goalI > rows || goalJ < 0 || goalJ > cols)
-      throw rangeError("Bad value in maze::print");
+    if (goalI < 0 || goalI > rows || goalJ < 0 || goalJ > cols)
+	throw rangeError("Bad value in maze::print");
 
-   if (currI < 0 || currI > rows || currJ < 0 || currJ > cols)
-      throw rangeError("Bad value in maze::print");
+    if (currI < 0 || currI > rows || currJ < 0 || currJ > cols)
+	throw rangeError("Bad value in maze::print");
 
-   for (int i = 0; i <= rows-1; i++)
-   {
-      for (int j = 0; j <= cols-1; j++)
-      {
-	 if (i == goalI && j == goalJ)
-	    cout << "*";
-	 else
-	    if (i == currI && j == currJ)
-	       cout << "+";
+    for (int i = 0; i <= rows-1; i++)
+    {
+	for (int j = 0; j <= cols-1; j++)
+	{
+	    if (i == goalI && j == goalJ)
+		cout << "*";
 	    else
-	       if (value[i][j])
-		  cout << " ";
-	       else
-		  cout << "X";	  
-      }
-      cout << endl;
-   }
-   cout << endl;
+		if (i == currI && j == currJ)
+		    cout << "+";
+		else
+		    if (value[i][j])
+			cout << " ";
+		    else
+			cout << "X";	  
+	}
+	cout << endl;
+    }
+    cout << endl;
 }
 
 bool maze::isLegal(int i, int j)
 // Return the value stored at the (i,j) entry in the maze, indicating
 // whether it is legal to occupy cell (i,j).
 {
-   if (i < 0 || i > rows || j < 0 || j > cols)
-      throw rangeError("Bad value in maze::isLegal");
+    if (i < 0 || i > rows || j < 0 || j > cols)
+	throw rangeError("Bad value in maze::isLegal");
 
-   return value[i][j];
+    return value[i][j];
 }
 
 void maze::mapMazeToGraph(graph &g)
@@ -255,7 +247,7 @@ void maze::mapMazeToGraph(graph &g)
                 {
                     g.addEdge(getMap(i-1,j), n);
                 }
-		        if (j != 0 && isLegal(i, j-1))
+		if (j != 0 && isLegal(i, j-1))
                 {
                     g.addEdge(getMap(i,j-1), n);
                 }
@@ -282,38 +274,37 @@ void maze::printPath(stack<int> &st)
 
 int main()
 {
-   ifstream fin;
+    ifstream fin;
    
-   // Read the maze from the file.
-   string fileName = "maze1.txt";
+    // Read the maze from the file.
+    string fileName = "maze1.txt";
 
-   fin.open(fileName.c_str());
-   if (!fin)
-   {
-      cerr << "Cannot open " << fileName << endl;
-      exit(1);
-   }
+    fin.open(fileName.c_str());
+    if (!fin)
+    {
+	cerr << "Cannot open " << fileName << endl;
+	exit(1);
+    }
 
-   try
-   {
-      graph g;
-      stack<int> st;
-      while (fin && fin.peek() != 'Z')
-      {
-         maze m(fin);
-         m.mapMazeToGraph(g);
-         cout << g;
-         m.findPathRecursive(g);
-         m.findPathNonRecursive(g);
-         m.print(m.numRows()-1, m.numCols()-1, 0, 0);
-      }
-   } 
-   catch (indexRangeError &ex) 
-   { 
-      cout << ex.what() << endl; exit(1);
-   }
-   catch (rangeError &ex)
-   {
-      cout << ex.what() << endl; exit(1);
-   }
+    try
+    {
+	graph g;
+	stack<int> st;
+	while (fin && fin.peek() != 'Z')
+	{
+	    maze m(fin);
+	    m.mapMazeToGraph(g);
+	    cout << g;
+	    //m.findPathRecursive(g);
+	    m.findPathNonRecursive(g);
+	}
+    } 
+    catch (indexRangeError &ex) 
+    { 
+	cout << ex.what() << endl; exit(1);
+    }
+    catch (rangeError &ex)
+    {
+	cout << ex.what() << endl; exit(1);
+    }
 }
