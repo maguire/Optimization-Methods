@@ -33,20 +33,37 @@ stack<int> nonRecursiveDFS(int startId, int dstId, graph &g )
 {
     stack<int> st;
     st.push(startId);
+    stack<int> path;
+    bool found = false;
+    bool all_visited;
 
     while (!st.empty())
     {
 	int top = st.top();
+	path.push(top);
 	st.pop();
 	g.visit(top);
-	g.mark(top);
-	if (top == dstId) break;
+	if (top == dstId)
+	{
+	    found = true;
+	    break;
+	}
 	vector<int> lst = getNeighbors(top, g);
 	for (int i = 0; i < lst.size(); i++)
 	{
-	    if (!g.isVisited(lst[i]))
+	    all_visited = true;
+
+	    if (!g.isMarked(lst[i]))
 		st.push(lst[i]);
 	}
+    }
+    
+    if (found)
+	return path;
+    else
+    {
+	stack<int> em;
+	return em;
     }
 }
 
@@ -119,7 +136,16 @@ void maze::findPathNonRecursive(graph &g)
     g.clearMark();
     int start = getMap(0,0);
     int end = getMap(numRows()-1, numCols()-1);
-    stack<int> path = nonRecursiveDFS(start, end, g);
+    stack<int> reverse_path = nonRecursiveDFS(start, end, g);
+    stack<int> path;
+    
+    while (!reverse_path.empty())
+    {
+	int top = reverse_path.top();
+	reverse_path.pop();
+	if (g.isVisited(top))
+	    path.push(top);
+    }
     
     printPath(path);
 }
@@ -258,6 +284,11 @@ void maze::mapMazeToGraph(graph &g)
 
 void maze::printPath(stack<int> &st)
 {
+    if (st.empty())
+    {
+	cout << "no path found" << endl;
+    }
+
     int top;
     int i;
     int j;
