@@ -14,8 +14,8 @@
 using namespace std;
 
 vector<int> getNeighbors(int id, graph &g);
-void findPathRecursive(int srcId, int dstId, graph &g, 
-		       stack<int> &path, bool &done);
+void recursiveDfs(int srcId, int dstId, graph &g, 
+                  stack<int> &path, bool &done);
 
 vector<int> getNeighbors(int id, graph &g)
 {
@@ -29,26 +29,31 @@ vector<int> getNeighbors(int id, graph &g)
     return lst;
 }
 
-
-void findPathRecursive(int curId, int dstId, graph &g,
-		       stack<int> &path, bool &done)
+void recursiveDfs(int curId, int dstId, graph &g,
+		        stack<int> &path, bool &done)
 {
     if (curId == dstId)
     {
-	done = true;
-	path.push(curId);
+        done = true;
+        path.push(curId);
     }
-
-    g.mark(curId);
-    g.visit(curId);
-    
-    vector<int> lst = getNeighbors(curId, g);
-    
-    while (!lst.empty())
+    else
     {
-	findPathRecursive(lst.back(), dstId, g, path, done);
-	if (done) path.push(curId);
-	lst.pop_back();
+        g.mark(curId);
+        g.visit(curId);
+        
+        vector<int> lst = getNeighbors(curId, g);
+    
+        while (!lst.empty())
+        {
+            recursiveDfs(lst.back(), dstId, g, path, done);
+            if (done) 
+            {
+                path.push(curId);
+                break;
+            }
+	        lst.pop_back();
+        }
     }
 }
 
@@ -70,12 +75,30 @@ class maze
 
       void mapMazeToGraph(graph &g);
 
+      void findPathRecursive(graph &g);
+
    private:
       int rows; // number of rows in the maze
       int cols; // number of columns in the maze
       matrix<int> map;
       matrix<bool> value;
 };
+
+void maze::findPathRecursive(graph &g)
+{
+    stack<int> path;
+    int start = getMap(0,0);
+    int end = getMap(numRows()-1, numCols()-1);
+    bool done = false;
+    recursiveDfs(start, end, g, path, done);
+
+    while (!path.empty())
+    {
+        cout << path.top() << " ";
+        path.pop();
+    }
+    cout << endl;       
+}
 
 void maze::setMap(int i, int j, int n)
 // Set mapping from maze cell (i,j) to graph node n. 
@@ -182,11 +205,11 @@ void maze::mapMazeToGraph(graph &g)
 		// have not been created
                 if (i != 0 && isLegal(i-1, j))
                 {
-                   g.addEdge(n, getMap(i-1,j)); 
+                    g.addEdge(getMap(i-1,j), n);
                 }
-		if (j != 0 && isLegal(i, j-1))
+		        if (j != 0 && isLegal(i, j-1))
                 {
-                   g.addEdge(n, getMap(i,j-1));
+                    g.addEdge(getMap(i,j-1), n);
                 }
             }
         }
@@ -211,11 +234,13 @@ int main()
    try
    {
       graph g;
+      stack<int> st;
       while (fin && fin.peek() != 'Z')
       {
          maze m(fin);
          m.mapMazeToGraph(g);
          cout << g;
+         m.findPathRecursive(g);
          m.print(m.numRows()-1, m.numCols()-1, 0, 0);
       }
       cin.get(x);
