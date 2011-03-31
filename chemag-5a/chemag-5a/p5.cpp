@@ -35,8 +35,7 @@ stack<int> nonRecursiveDFS(int startId, int dstId, graph &g )
     st.push(startId);
     stack<int> path;
     bool found = false;
-    bool all_visited;
-
+    
     while (!st.empty())
     {
 	int top = st.top();
@@ -51,8 +50,6 @@ stack<int> nonRecursiveDFS(int startId, int dstId, graph &g )
 	vector<int> lst = getNeighbors(top, g);
 	for (int i = 0; i < lst.size(); i++)
 	{
-	    all_visited = true;
-
 	    if (!g.isMarked(lst[i]))
 		st.push(lst[i]);
 	}
