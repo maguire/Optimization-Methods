@@ -14,7 +14,7 @@
 using namespace std;
 
 vector<int> getNeighbors(int id, graph &g);
-void recursiveDfs(int srcId, int dstId, graph &g, 
+void recursiveDFS(int srcId, int dstId, graph &g, 
                   stack<int> &path, bool &done);
 
 vector<int> getNeighbors(int id, graph &g)
@@ -22,14 +22,46 @@ vector<int> getNeighbors(int id, graph &g)
     vector<int> lst;
     for (int i = 0; i < g.numEdges(); i++)
     {
-	if (!g.isMarked(i) && g.isEdge(id, i))
+	if (g.isEdge(id, i))
 	    lst.push_back(i);
     }
     
     return lst;
 }
 
-void recursiveDfs(int curId, int dstId, graph &g,
+vector<int> nonRecursiveDFS(int startId, int dstId, graph &g )
+{
+    vector<int> path;
+    if( startId == dstId )
+        path.push_back(startId);
+    else
+    {
+        stack<int> nodes;
+        g.mark(startId);
+        g.visit(startId);
+        nodes.push(startId);
+        while(!nodes.empty())
+        {  
+             
+            int curId = nodes.top();
+            nodes.pop();
+            path.push_back(curId);
+            if (curId == dstId) return path;
+            vector<int> lst = getNeighbors(curId, g);
+            for(int i = 0; i < lst.size(); i++)
+            {
+                if(!g.isVisited(lst[i])) {
+                    nodes.push(lst[i]);
+                }
+            }
+        }
+    }
+    return vector<int>();
+
+}
+
+
+void recursiveDFS(int curId, int dstId, graph &g,
 		        stack<int> &path, bool &done)
 {
     if (curId == dstId)
@@ -46,13 +78,16 @@ void recursiveDfs(int curId, int dstId, graph &g,
     
         while (!lst.empty())
         {
-            recursiveDfs(lst.back(), dstId, g, path, done);
+            int current =  lst.back();
+            lst.pop_back();
+
+            if (!g.isVisited(current)) 
+                recursiveDFS(current, dstId, g, path, done);
             if (done) 
             {
                 path.push(curId);
                 break;
             }
-	        lst.pop_back();
         }
     }
 }
@@ -76,6 +111,7 @@ class maze
       void mapMazeToGraph(graph &g);
 
       void findPathRecursive(graph &g);
+      void findPathNonRecursive(graph &g);
 
    private:
       int rows; // number of rows in the maze
@@ -84,13 +120,29 @@ class maze
       matrix<bool> value;
 };
 
+void maze::findPathNonRecursive(graph &g)
+{
+    g.clearVisit();
+    g.clearMark();
+    int start = getMap(0,0);
+    int end = getMap(numRows()-1, numCols()-1);
+    vector<int> path = nonRecursiveDFS(start, end, g);
+    
+    for( int i =0; i < path.size(); i++)
+    {
+        cout << path[i] << " ";
+    }
+    cout << endl;       
+}
 void maze::findPathRecursive(graph &g)
 {
+    g.clearVisit();
+    g.clearMark();
     stack<int> path;
     int start = getMap(0,0);
     int end = getMap(numRows()-1, numCols()-1);
     bool done = false;
-    recursiveDfs(start, end, g, path, done);
+    recursiveDFS(start, end, g, path, done);
 
     while (!path.empty())
     {
@@ -218,7 +270,6 @@ void maze::mapMazeToGraph(graph &g)
 
 int main()
 {
-   char x;
    ifstream fin;
    
    // Read the maze from the file.
@@ -241,9 +292,9 @@ int main()
          m.mapMazeToGraph(g);
          cout << g;
          m.findPathRecursive(g);
+         m.findPathNonRecursive(g);
          m.print(m.numRows()-1, m.numCols()-1, 0, 0);
       }
-      cin.get(x);
    } 
    catch (indexRangeError &ex) 
    { 
