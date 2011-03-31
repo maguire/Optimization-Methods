@@ -21,7 +21,7 @@ vector<int> getNeighbors(int id, graph &g)
 // get all neighbors of the node with given id in graph g
 {
     vector<int> lst;
-    for (int i = 0; i < g.numEdges(); i++)
+    for (int i = 0; i < g.numNodes(); i++)
     {
         if (g.isEdge(id, i))
         {
@@ -37,6 +37,7 @@ stack<int> nonRecursiveDFS(int startId, int dstId, graph &g )
 // and does not use recursion
 {
     stack<int> st;
+    stack<edge> edges;
     st.push(startId);
     stack<int> path;
     bool found = false;
@@ -44,7 +45,17 @@ stack<int> nonRecursiveDFS(int startId, int dstId, graph &g )
     while (!st.empty())
     {
         int top = st.top();
+        //check if before we had gone into a sink and remove from path
+        while (!edges.empty() && path.top() != edges.top().getSource())
+        {
+            path.pop();
+        }
+
         path.push(top);
+        if (!edges.empty())
+        {
+            edges.pop();
+        }
         st.pop();
         g.visit(top);
         if (top == dstId)
@@ -58,8 +69,10 @@ stack<int> nonRecursiveDFS(int startId, int dstId, graph &g )
             if (!g.isMarked(lst[i]))
             {
                 st.push(lst[i]);
+                edges.push(g.getEdge(top, lst[i]));
             }
         }
+
     }
 
     if (found)
@@ -327,40 +340,44 @@ void maze::printPath(stack<int> &st)
     {
         cout << "no path found" << endl;
     }
-
-    int top;
-    int ip, jp, prev = 0;
-    int i;
-    int j;
-
-    while (!st.empty())
+    else
     {
+        cout << "-----------------------------" << endl;
 
-        top = st.top();
-        ip = getReverseMapI(prev);
-        jp = getReverseMapJ(prev);
-        i = getReverseMapI(top);
-        j = getReverseMapJ(top);
-        if (ip < i)
-        {
-            cout << "Go Down" << endl;
-        }
-        if (ip > i)
-        {
-            cout << "Go Up" << endl;
-        }
-        if (jp < j)
-        {
-            cout << "Go Right" << endl;
-        }
-        if (jp > j)
-        {
-            cout << "Go Left" << endl;
-        }
+        int top;
+        int ip, jp, prev = 0;
+        int i;
+        int j;
 
-        print(numRows() - 1, numCols() - 1, i, j);
-        st.pop();
-        prev = top;
+        while (!st.empty())
+        {
+
+            top = st.top();
+            ip = getReverseMapI(prev);
+            jp = getReverseMapJ(prev);
+            i = getReverseMapI(top);
+            j = getReverseMapJ(top);
+            if (ip < i)
+            {
+                cout << "Go Down" << endl;
+            }
+            else if (ip > i)
+            {
+                cout << "Go Up" << endl;
+            }
+            else if (jp < j)
+            {
+                cout << "Go Right" << endl;
+            }
+            else if (jp > j)
+            {
+                cout << "Go Left" << endl;
+            }
+
+            print(numRows() - 1, numCols() - 1, i, j);
+            st.pop();
+            prev = top;
+        }
     }
 }
 
@@ -369,7 +386,7 @@ int main()
     ifstream fin;
 
     // Read the maze from the file.
-    string fileName = "maze1.txt";
+    string fileName = "maze3.txt";
 
     fin.open(fileName.c_str());
     if (!fin)
@@ -387,7 +404,7 @@ int main()
             maze m(fin);
             m.mapMazeToGraph(g);
             cout << g;
-            //m.findPathRecursive(g);
+            m.findPathRecursive(g);
             m.findPathNonRecursive(g);
         }
     }

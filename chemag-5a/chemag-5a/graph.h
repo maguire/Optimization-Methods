@@ -501,8 +501,11 @@ bool graph::isEdge(NodeType i, NodeType j) const
 // large.
 {
    if (i < 0 || i >= numNodes() || j < 0 || j >= numNodes())
+   { 
+        cout << i << endl;
+        cout << j << endl; 
       throw rangeError("Bad value in graph::isEdge");
-
+    }
    return edges[i][j].isValid();
 }
 
