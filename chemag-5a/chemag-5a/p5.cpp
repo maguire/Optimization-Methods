@@ -110,6 +110,7 @@ class maze
 
       void mapMazeToGraph(graph &g);
 
+    void printPath(stack<int> &st);
       void findPathRecursive(graph &g);
       void findPathNonRecursive(graph &g);
 
@@ -144,12 +145,7 @@ void maze::findPathRecursive(graph &g)
     bool done = false;
     recursiveDFS(start, end, g, path, done);
 
-    while (!path.empty())
-    {
-        cout << path.top() << " ";
-        path.pop();
-    }
-    cout << endl;       
+    printPath(path);
 }
 
 void maze::setMap(int i, int j, int n)
@@ -265,6 +261,22 @@ void maze::mapMazeToGraph(graph &g)
                 }
             }
         }
+    }
+}
+
+void maze::printPath(stack<int> &st)
+{
+    int top;
+    int i;
+    int j;
+
+    while (!st.empty())
+    {
+	top = st.top();
+	i = getReverseMapI(top);
+	j = getReverseMapJ(top);
+	print(numRows()-1, numCols()-1, i, j);
+	st.pop();
     }
 }
 
