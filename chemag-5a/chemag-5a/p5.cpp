@@ -30,7 +30,7 @@ vector<int> getNeighbors(int id, graph &g)
 }
 
 
-void findPathRecurisve(int curId, int dstId, graph &g,
+void findPathRecursive(int curId, int dstId, graph &g,
 		       stack<int> &path, bool &done)
 {
     if (curId == dstId)
