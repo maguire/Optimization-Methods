@@ -446,6 +446,7 @@ void graph::removeEdge(int i, int j)
 }
 
 EdgeWeight graph::getEdgeWeight(int i, int j) const
+
 // Return the weight of the edge between node i and node j. Throws an
 // exception if i or j is too small or too large, or if the edge does
 // not exist.

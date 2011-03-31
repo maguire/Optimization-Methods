@@ -1,5 +1,6 @@
 // Project 5
 
+#include <cstdlib>
 #include <iostream>
 #include <limits.h>
 #include "d_except.h"
@@ -31,28 +32,32 @@ class maze
    private:
       int rows; // number of rows in the maze
       int cols; // number of columns in the maze
-
+      matrix<int> map;
       matrix<bool> value;
 };
 
 void maze::setMap(int i, int j, int n)
 // Set mapping from maze cell (i,j) to graph node n. 
 {
+    map[i][j] = n;
 }
 
 int maze ::getMap(int i, int j) const
 // Return mapping of maze cell (i,j) in the graph.
 {
+    return map[i][j];
 }
 
 int maze ::getReverseMapI(int n) const
 // Return reverse mapping of node n to it's maze i value.
 {
+    return n % rows;
 }
 
 int maze ::getReverseMapJ(int n) const
 // Return reverse mapping of node n to it's maze j value.
 {
+    return n % cols;
 }
 
 maze::maze(ifstream &fin)
@@ -123,7 +128,42 @@ bool maze::isLegal(int i, int j)
 void maze::mapMazeToGraph(graph &g)
 // Create a graph g that represents the legal moves in the maze m.
 {
+    for(int i = 0; i < value.rows(); i++)
+    {
+        for(int j = 0; j < value.cols(); j++)
+        {
+            if (value[i][j])
+            {
+                int n = g.addNode();
+                setMap(i,j,n); 
+                if (i != 0 && value[i-1][j])
+                {
+                   g.addEdge(n, getMap(i-1,j)); 
+                }
+                if (i != value.rows() - 1 && value[i+1][j])
+                {
+                   g.addEdge(n, getMap(i+1,j)); 
+                }
+                if (j != 0 && value[i][j-1])
+                {
+                   g.addEdge(n, getMap(i,j-1)); 
+                }
+                if (j != value.cols() - 1 && value[i][j+1])
+                {
+                   g.addEdge(n, getMap(i,j+1)); 
+                }
+            }
+           
+        }
+
+    }
 }
+
+void findPathRecursive(graph &g, maze &m)
+{
+    node n = g.getNode(m.getMap(0,0));
+}
+
 
 int main()
 {
@@ -131,7 +171,7 @@ int main()
    ifstream fin;
    
    // Read the maze from the file.
-   string fileName = "maze.txt";
+   string fileName = "maze1.txt";
 
    fin.open(fileName.c_str());
    if (!fin)
@@ -146,6 +186,9 @@ int main()
       while (fin && fin.peek() != 'Z')
       {
          maze m(fin);
+         m.mapMazeToGraph(g);
+         cout << g;
+         m.print(m.numRows()-1, m.numCols()-1, 0, 0);
       }
    } 
    catch (indexRangeError &ex) 
