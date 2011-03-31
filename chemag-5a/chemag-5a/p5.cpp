@@ -13,19 +13,11 @@
 
 using namespace std;
 
-static vector<int> getNeighbors(int id, graph &g);
+vector<int> getNeighbors(int id, graph &g);
 void findPathRecursive(int srcId, int dstId, graph &g, 
-		       stack<int> &path, bool &done = false);
-void findPathNonRecursive(int srcId, int dstId, graph &g,
-			  stack<int> &path, bool &done = false);
+		       stack<int> &path, bool &done);
 
-void findPathNonRecursive(int srcId, int dstId, graph &g,
-			  stack<int> &path, bool &done)
-{
-    
-}
-
-static vector<int> getNeighbors(int id, graph &g)
+vector<int> getNeighbors(int id, graph &g)
 {
     vector<int> lst;
     for (int i = 0; i < g.numEdges(); i++)
@@ -37,6 +29,7 @@ static vector<int> getNeighbors(int id, graph &g)
     return lst;
 }
 
+
 void findPathRecurisve(int curId, int dstId, graph &g,
 		       stack<int> &path, bool &done)
 {
@@ -45,20 +38,19 @@ void findPathRecurisve(int curId, int dstId, graph &g,
 	done = true;
 	path.push(curId);
     }
+
+    g.mark(curId);
+    g.visit(curId);
     
-    node n = g.getNode(curId);
-    n.visit();
-    n.mark();
-    vector<int> lst = getNeighbors(curId, &g);
+    vector<int> lst = getNeighbors(curId, g);
     
     while (!lst.empty())
     {
-	findPathRecursive(lst.back(), dstId, g);
+	findPathRecursive(lst.back(), dstId, g, path, done);
 	if (done) path.push(curId);
 	lst.pop_back();
     }
 }
-
 
 class maze
 {
@@ -188,7 +180,7 @@ void maze::mapMazeToGraph(graph &g)
 		// only check above and to the left
 		// since nodes down and to the right
 		// have not been created
-                if (i != 0 && isLega(i-1, j))
+                if (i != 0 && isLegal(i-1, j))
                 {
                    g.addEdge(n, getMap(i-1,j)); 
                 }
@@ -226,6 +218,7 @@ int main()
          cout << g;
          m.print(m.numRows()-1, m.numCols()-1, 0, 0);
       }
+      cin.get(x);
    } 
    catch (indexRangeError &ex) 
    { 

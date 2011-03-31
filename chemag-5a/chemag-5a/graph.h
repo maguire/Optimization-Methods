@@ -154,6 +154,8 @@ ostream &operator<<(ostream &ostr, const node &n)
 {
    ostr << "node: " << n.getId() << " weight: " << n.getWeight() 
         << " visited: " << n.isVisited() << " marked " << n.isMarked() << endl;
+
+   return ostr;
 }
 
 class edge
@@ -275,8 +277,10 @@ bool edge::isValid() const
 ostream &operator<<(ostream &ostr, const edge &e)
 // Print all edge information for a valid edge;
 {
-   cout << "edge (" << e.getSource() << "," << e.getDest() << "): ";
-   cout << " weight: " << e.getWeight() << endl;
+   ostr << "edge (" << e.getSource() << "," << e.getDest() << "): ";
+   ostr << " weight: " << e.getWeight() << endl;
+
+   return ostr;
 }
 
 class graph
@@ -539,11 +543,13 @@ void graph::printEdges() const
 ostream &operator<<(ostream &ostr, const graph &g)
 // Print all information about the graph.
 {
-   cout << "------------------------------------------------" << endl;
+   ostr << "------------------------------------------------" << endl;
    g.printNodes();
-   cout << endl;
+   ostr << endl;
    g.printEdges();
-   cout << endl;
+   ostr << endl;
+
+   return ostr;
 }
 
 node &graph::getNode(int i) 
