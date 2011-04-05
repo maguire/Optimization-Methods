@@ -42,11 +42,11 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
     stack<int> path;
     map<int, int> edges;
     q.push(startId);
-    bool found;
+    bool found = false;
 
     while (!q.empty())
     {
-     	int top = q.front();
+	int top = q.front();
 	q.pop();
 
 	if (top == dstId)
@@ -63,8 +63,6 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
 	    if (!g.isVisited(lst[i]))
 	    {
 		q.push(lst[i]);
-		g.visit(lst[i]);
-		cout << "putting " << lst[i] << " <- " << top << endl;
 		edges.insert( pair<int, int>(lst[i], top) );
 	    }
 	}
@@ -74,9 +72,7 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
     int current = dstId;
     while (found && current != startId)
     {
-	cout << "got to: " << current;
 	current = edges.find(current)->second;
-	cout << " from: " << current << endl;
 	path.push(current);
     }
     return path;
@@ -241,7 +237,7 @@ bool maze::findShortestPath2(graph &g)
     int start = getMap(0, 0);
     int end = getMap(numRows() - 1, numCols() - 1);
     stack<int> path = nonRecursiveBFS(start, end, g);
-//    printPath(path);
+    printPath(path);
 }
 void maze::findPathNonRecursive(graph &g)
 // method for finding a path in the maze given a graph g representing the maze
@@ -494,11 +490,10 @@ int main()
         {
             maze m(fin);
 	    m.mapMazeToGraph(g);
-	    m.print(m.numRows() - 1, m.numCols() - 1, 0, 0);
-	    //cout << g;
-            //m.findShortestPath1(g);
+	    //m.print(m.numRows() - 1, m.numCols() - 1, 0, 0);
+	    cout << g;
+            m.findShortestPath1(g);
             m.findShortestPath2(g);
-	    //m.findPathRecursive(g);
         }
     }
     catch (indexRangeError &ex)
