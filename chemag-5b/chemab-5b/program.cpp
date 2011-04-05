@@ -475,7 +475,7 @@ int main()
     ifstream fin;
 
     // Read the maze from the file.
-    string fileName = "maze2.txt";
+    string fileName = "maze3.txt";
 
     fin.open(fileName.c_str());
     if (!fin)
