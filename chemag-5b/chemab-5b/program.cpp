@@ -33,44 +33,55 @@ vector<int> getNeighbors(int id, graph &g)
     return lst;
 }
 
-vector< stack<int> > nonRecursiveBFS(int startId, int dstId, graph &g )
+stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
 // implement a version of Breadth First Search that uses a stack data structure
 // and does not use recursion
 {
     cout << startId << endl;
-    vector< stack<int> > paths;
     queue<int> q;
-    queue<edge> edges;
-    q.push(startId);
     stack<int> path;
+    vector<edge> edges;
+    q.push(startId);
+    bool found;
 
     while (!q.empty())
     {
-        int top = q.front();
+     	int top = q.front();
+	q.pop();
 
-        path.push(top);
-        if (!edges.empty())
-        {
-            edges.pop();
-        }
-        q.pop();
-        g.visit(top);
-        if (top == dstId)
-        {   
-            paths.push_back(path);
-        }
-        vector<int> lst = getNeighbors(top, g);
-        for (int i = 0; i < lst.size(); i++)
-        {
-            if (!g.isVisited(lst[i]))
-            {
-                q.push(lst[i]);
-                edges.push(g.getEdge(top, lst[i]));
-            }
-        }
+	if (top == dstId)
+	{
+	    path.push(dstId);
+	    break;
+	}
 
+	g.visit(top);
+	vector<int> lst = getNeighbors(top, g);
+	for (int i = 0; i < lst.size(); i++)
+	{
+	    if (!g.isVisited(lst[i]))
+	    {
+		q.push(lst[i]);
+		edges.push_back(g.getEdge(top, lst[i]));
+	    }
+	}
     }
-    return paths;
+
+    // start backtracking
+    int current = dstId;
+    while (found && current != startId)
+    {
+	for (int i = 0; i < edges.size(); i++)
+	{
+	    if (edges[i].getDest() == current)
+	    {
+		current = edges[i].getSource();
+		path.push(current);
+		continue;
+	    }
+	}
+    }
+    return path;
 }
 
 vector<stack<int> > nonRecursiveDFS(int startId, int dstId, graph &g )
@@ -231,28 +242,8 @@ bool maze::findShortestPath2(graph &g)
     g.clearMark();
     int start = getMap(0, 0);
     int end = getMap(numRows() - 1, numCols() - 1);
-    vector< stack<int> > rpaths = nonRecursiveBFS(start, end, g);
-    stack<int> reverse_path;
-    
-    for(int i = 0; i < rpaths.size(); i++)
-        if (rpaths[i].size() > reverse_path.size())
-            reverse_path = rpaths[i];
-
-    stack<int> path;
-
-    
-    while (!reverse_path.empty())
-    {
-        int top = reverse_path.top();
-        reverse_path.pop();
-        if (g.isVisited(top))
-        {
-            path.push(top);
-        }
-    }
-
+    stack<int> path = nonRecursiveBFS(start, end, g);
     printPath(path);
-
 }
 void maze::findPathNonRecursive(graph &g)
 // method for finding a path in the maze given a graph g representing the maze
@@ -262,8 +253,7 @@ void maze::findPathNonRecursive(graph &g)
     g.clearMark();
     int start = getMap(0, 0);
     int end = getMap(numRows() - 1, numCols() - 1);
-    vector< stack<int> > rpaths = nonRecursiveBFS(start, end, g);
-    
+    vector< stack<int> > rpaths = nonRecursiveDFS(start, end, g);   
     stack<int> reverse_path;
     
     for(int i = 0; i < rpaths.size(); i++)
@@ -505,7 +495,7 @@ int main()
             maze m(fin);
             m.mapMazeToGraph(g);
             cout << g;
-            m.findShortestPath1(g);
+            //m.findShortestPath1(g);
             m.findShortestPath2(g);
         }
     }
