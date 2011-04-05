@@ -11,6 +11,7 @@
 #include <vector>
 #include <queue>
 #include <stack>
+#include <map>
 #include <fstream>
 #include "d_matrix.h"
 #include "graph.h"
@@ -37,10 +38,9 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
 // implement a version of Breadth First Search that uses a stack data structure
 // and does not use recursion
 {
-    cout << startId << endl;
     queue<int> q;
     stack<int> path;
-    vector<edge> edges;
+    map<int, int> edges;
     q.push(startId);
     bool found;
 
@@ -51,6 +51,7 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
 
 	if (top == dstId)
 	{
+	    found = true;
 	    path.push(dstId);
 	    break;
 	}
@@ -62,7 +63,9 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
 	    if (!g.isVisited(lst[i]))
 	    {
 		q.push(lst[i]);
-		edges.push_back(g.getEdge(top, lst[i]));
+		g.visit(lst[i]);
+		cout << "putting " << lst[i] << " <- " << top << endl;
+		edges.insert( pair<int, int>(lst[i], top) );
 	    }
 	}
     }
@@ -71,15 +74,10 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
     int current = dstId;
     while (found && current != startId)
     {
-	for (int i = 0; i < edges.size(); i++)
-	{
-	    if (edges[i].getDest() == current)
-	    {
-		current = edges[i].getSource();
-		path.push(current);
-		continue;
-	    }
-	}
+	cout << "got to: " << current;
+	current = edges.find(current)->second;
+	cout << " from: " << current << endl;
+	path.push(current);
     }
     return path;
 }
@@ -243,7 +241,7 @@ bool maze::findShortestPath2(graph &g)
     int start = getMap(0, 0);
     int end = getMap(numRows() - 1, numCols() - 1);
     stack<int> path = nonRecursiveBFS(start, end, g);
-    printPath(path);
+//    printPath(path);
 }
 void maze::findPathNonRecursive(graph &g)
 // method for finding a path in the maze given a graph g representing the maze
@@ -434,15 +432,16 @@ void maze::printPath(stack<int> &st)
     else
     {
         cout << "-----------------------------" << endl;
-
+	
         int top;
         int ip, jp, prev = 0;
         int i;
         int j;
+	int count = 0;
 
         while (!st.empty())
         {
-
+	    count++;
             top = st.top();
             ip = getReverseMapI(prev);
             jp = getReverseMapJ(prev);
@@ -469,6 +468,7 @@ void maze::printPath(stack<int> &st)
             st.pop();
             prev = top;
         }
+	cout << "path length: " << count << endl;
     }
 }
 
@@ -477,7 +477,7 @@ int main()
     ifstream fin;
 
     // Read the maze from the file.
-    string fileName = "maze1.txt";
+    string fileName = "maze2.txt";
 
     fin.open(fileName.c_str());
     if (!fin)
@@ -493,10 +493,12 @@ int main()
         while (fin && fin.peek() != 'Z')
         {
             maze m(fin);
-            m.mapMazeToGraph(g);
-            cout << g;
+	    m.mapMazeToGraph(g);
+	    m.print(m.numRows() - 1, m.numCols() - 1, 0, 0);
+	    //cout << g;
             //m.findShortestPath1(g);
             m.findShortestPath2(g);
+	    //m.findPathRecursive(g);
         }
     }
     catch (indexRangeError &ex)
