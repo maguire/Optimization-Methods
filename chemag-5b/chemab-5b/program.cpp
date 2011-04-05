@@ -409,10 +409,12 @@ void maze::mapMazeToGraph(graph &g)
                 if (i != 0 && isLegal(i - 1, j))
                 {
                     g.addEdge(getMap(i - 1, j), n);
-                }
+		    g.addEdge(n, getMap(i - 1, j));
+		}
                 if (j != 0 && isLegal(i, j - 1))
                 {
                     g.addEdge(getMap(i, j - 1), n);
+		    g.addEdge(n, getMap(i, j - 1));
                 }
             }
         }
