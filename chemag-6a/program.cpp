@@ -47,7 +47,6 @@ void exploreDFS(int cur, graph &g, bool &cyclic)
 	else if (!g.isVisited(lst[i]))
 	{
 	    exploreDFS(lst[i], g, cyclic);
-	    if (cyclic) return;
 	}
     }
     g.unMark(top);
