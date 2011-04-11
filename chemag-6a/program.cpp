@@ -30,6 +30,7 @@ vector<int> getNeighbors(int id, graph &g)
 
     return lst;
 }
+
 void exploreDFS(int cur, graph &g, bool &cyclic)
 // implement a version of Depth First Search that uses a stack data structure
 // and does not use recursion
@@ -56,14 +57,25 @@ void exploreDFS(int cur, graph &g, bool &cyclic)
 bool isCyclic(graph &g)
 // Returns true if the graph g contains a cycle.  Otherwise, returns false.
 {
+    g.clearVisit();
+    g.clearMark();
     bool cyclic = false;
-    exploreDFS(0, g, cyclic);
+    for (int i = 0; i < g.numNodes(); i++)
+    {
+	if (!g.isVisited(i))
+	    exploreDFS(i, g, cyclic);
+    }
+
+    g.clearVisit();
+    g.clearMark();
+
     return cyclic;
 }
 bool isConnected(graph &g)
 // Returns true if the graph g is connected.  Otherwise returns false.
 {
     g.clearVisit();
+    g.clearMark();
     bool c = false;
     exploreDFS(0, g, c);
     for ( int i = 0; i < g.numNodes(); i++)
@@ -72,7 +84,6 @@ bool isConnected(graph &g)
         {
             return false;
         }
-
     }
     return true;
 }
@@ -85,19 +96,28 @@ void findSpanningForest(graph &g, graph &sf)
     }
     else
     {
-        if (g.numNodes() > 0)
-            sf.addNode(g.getNode(0));
-        for(int i = 1; i < g.numNodes(); i++)
+	// add all the nodes from g to sf
+	for (int i = 0; i < g.numNodes(); i++)
+	{
+	    sf.addNode(g.getNode(i));
+	}
+
+	// build the sf
+        for(int i = 0; i < g.numNodes(); i++)
         {
-            sf.addNode(g.getNode(i));
             for (int x = 0; x < g.numNodes(); x++)
             {
                 if (g.isEdge(i, x))
                 {
-                    sf.addEdge(i, x);
+                    sf.addEdge(i, x, g.getEdgeWeight(i, x));
+		    sf.addEdge(x, i, g.getEdgeWeight(x, i));
+
                     if(isCyclic(sf))
+		    {
+			sf.removeEdge(x,i);
                         sf.removeEdge(i,x);
-                }
+		    }
+		}
             }       
         }        
     }
@@ -156,7 +176,7 @@ int main()
       cout << "Finding spanning forest" << endl;
 
       // Initialize an empty graph to contain the spanning forest
-      graph sf(g.numNodes());
+      graph sf;
       findSpanningForest(g,sf);
 
       cout << endl;
@@ -188,5 +208,17 @@ int main()
    {
       cout << ex.what() << endl; exit(1);
    }
+
+   cout << " -----------------------------------------------------" << endl;
+
+   graph fi;
+   fi.addNode();
+   fi.addNode();
+   fi.addEdge(0, 1);
+   fi.addEdge(1, 0);
+
+   cout << isConnected(fi) << endl;
+   cout << isCyclic(fi) << endl;
+
 }
 
