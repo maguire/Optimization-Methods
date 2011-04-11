@@ -10,6 +10,7 @@
 #include <queue>
 #include <stack>
 #include <vector>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -43,14 +44,20 @@ void exploreDFS(graph &g, bool &cyclic)
         st.pop();
         g.visit(top);
         vector<int> lst = getNeighbors(top, g);
-        for (int i = 0; i < lst.size(); i++)
+         for (int i = 0; i < lst.size(); i++)
         {
             if (!g.isVisited(lst[i]))
             {
+		// mark edges so that we don't fall for 
+		// trivial cycles
+		g.getEdge(top, lst[i]).mark();
+		g.getEdge(lst[i], top).mark();
                 st.push(lst[i]);
             }
-            else
+            else if (!g.getEdge(top, lst[i]).isMarked())
             {
+		// we only have a cycle if the second edge used to get to 
+		// the node haven't already been used
                 cyclic = true;
             }
         }
