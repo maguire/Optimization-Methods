@@ -110,7 +110,7 @@ void findSpanningForest(graph &g, graph &sf)
         {
             for (int x = 0; x < g.numNodes(); x++)
             {
-                if (g.isEdge(i, x))
+                if (g.isEdge(i, x) && !sf.isEdge(i, x))
                 {
                     sf.addEdge(i, x, g.getEdgeWeight(i, x));
 		    sf.addEdge(x, i, g.getEdgeWeight(x, i));
@@ -139,7 +139,7 @@ int main()
    // Read the name of the graph from the keyboard or
    // hard code it here for testing.
    
-   fileName = "graph2.txt";
+   fileName = "graph1.txt";
 
    //   cout << "Enter filename" << endl;
    //   cin >> fileName;
@@ -212,19 +212,5 @@ int main()
    {
       cout << ex.what() << endl; exit(1);
    }
-
-   cout << "-----------------------------------------------------" << endl;
-
-   graph fi;
-   fi.addNode();
-   fi.addNode();
-   fi.addEdge(0, 1);
-   fi.addEdge(1, 0);
-
-   isCyclic(fi);
-   cout << isCyclic(fi) << endl;
-
-   cout << fi << endl;
-
 }
 
