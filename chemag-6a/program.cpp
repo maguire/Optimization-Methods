@@ -31,7 +31,7 @@ vector<int> getNeighbors(int id, graph &g)
     return lst;
 }
 
-void exploreDFS(int cur, graph &g, bool &cyclic)
+void exploreDFS(int cur, int from, graph &g, bool &cyclic)
 // implement a version of Depth First Search that uses a stack data structure
 // and does not use recursion
 {
@@ -41,13 +41,16 @@ void exploreDFS(int cur, graph &g, bool &cyclic)
     vector<int> lst = getNeighbors(top, g);
     for (int i = 0; i < lst.size(); i++)
     {
-	if (g.isMarked(lst[i]))
+	if (from == lst[i])
+	    continue;
+
+     	if (g.isMarked(lst[i]))
 	{
 	    cyclic = true;
 	}
 	else if (!g.isVisited(lst[i]))
 	{
-	    exploreDFS(lst[i], g, cyclic);
+	    exploreDFS(lst[i], top, g, cyclic);
 	}
     }
     g.unMark(top);
@@ -63,7 +66,7 @@ bool isCyclic(graph &g)
     for (int i = 0; i < g.numNodes(); i++)
     {
 	if (!g.isVisited(i))
-	    exploreDFS(i, g, cyclic);
+	    exploreDFS(i, i, g, cyclic);
     }
 
     g.clearVisit();
@@ -77,7 +80,7 @@ bool isConnected(graph &g)
     g.clearVisit();
     g.clearMark();
     bool c = false;
-    exploreDFS(0, g, c);
+    exploreDFS(0, 0, g, c);
     for ( int i = 0; i < g.numNodes(); i++)
     {
         if(!g.isVisited(i))  
@@ -127,6 +130,7 @@ void findSpanningForest(graph &g, graph &sf)
 
 int main()
 {
+
    char x;
    ifstream fin;
    stack <int> moves;
@@ -135,7 +139,7 @@ int main()
    // Read the name of the graph from the keyboard or
    // hard code it here for testing.
    
-   fileName = "graph1.txt";
+   fileName = "graph2.txt";
 
    //   cout << "Enter filename" << endl;
    //   cin >> fileName;
@@ -209,7 +213,7 @@ int main()
       cout << ex.what() << endl; exit(1);
    }
 
-   cout << " -----------------------------------------------------" << endl;
+   cout << "-----------------------------------------------------" << endl;
 
    graph fi;
    fi.addNode();
@@ -217,8 +221,10 @@ int main()
    fi.addEdge(0, 1);
    fi.addEdge(1, 0);
 
-   cout << isConnected(fi) << endl;
+   isCyclic(fi);
    cout << isCyclic(fi) << endl;
+
+   cout << fi << endl;
 
 }
 
