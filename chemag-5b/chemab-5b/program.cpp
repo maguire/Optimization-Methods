@@ -36,7 +36,7 @@ vector<int> getNeighbors(int id, graph &g)
 
 stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
 // implement a version of Breadth First Search that uses a stack data structure
-// and does not use recursion
+// and does not use recursion and returns the first path found  
 {
     queue<int> q;
     stack<int> path;
@@ -80,7 +80,7 @@ stack<int> nonRecursiveBFS(int startId, int dstId, graph &g )
 
 vector<stack<int> > nonRecursiveDFS(int startId, int dstId, graph &g )
 // implement a version of Depth First Search that uses a stack data structure
-// and does not use recursion
+// and does not use recursion returns all paths
 {
     vector< stack<int> > paths;
     stack<int> st;
@@ -150,7 +150,7 @@ void recursiveDFS(int curId, int dstId, graph &g,
                 recursiveDFS(current, dstId, g, path, done);
             }
             if (done)
-                // if we found our node then construct our path
+            // if we found our node then construct our path
             {
                 path.push(curId);
                 break;
@@ -199,6 +199,7 @@ private:
 };
 
 bool maze::findShortestPath1(graph &g)
+//finds the shortest path in the given graph using DFS
 {
 
     g.clearVisit();
@@ -230,6 +231,7 @@ bool maze::findShortestPath1(graph &g)
 }
     
 bool maze::findShortestPath2(graph &g)
+// finds the shortest path in the given graph using BFS
 {
 
     g.clearVisit();
@@ -409,12 +411,12 @@ void maze::mapMazeToGraph(graph &g)
                 if (i != 0 && isLegal(i - 1, j))
                 {
                     g.addEdge(getMap(i - 1, j), n);
-		    g.addEdge(n, getMap(i - 1, j));
-		}
+		            g.addEdge(n, getMap(i - 1, j));
+		        }
                 if (j != 0 && isLegal(i, j - 1))
                 {
                     g.addEdge(getMap(i, j - 1), n);
-		    g.addEdge(n, getMap(i, j - 1));
+		            g.addEdge(n, getMap(i, j - 1));
                 }
             }
         }
@@ -422,6 +424,7 @@ void maze::mapMazeToGraph(graph &g)
 }
 
 void maze::printPath(stack<int> &st)
+// print the given stack path
 {
     if (st.empty())
     {
@@ -491,9 +494,8 @@ int main()
         while (fin && fin.peek() != 'Z')
         {
             maze m(fin);
-	    m.mapMazeToGraph(g);
-	    //m.print(m.numRows() - 1, m.numCols() - 1, 0, 0);
-	    cout << g;
+    	    m.mapMazeToGraph(g);
+    	    cout << g;
             m.findShortestPath1(g);
             m.findShortestPath2(g);
         }
