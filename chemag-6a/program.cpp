@@ -10,6 +10,7 @@
 #include <queue>
 #include <stack>
 #include <vector>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -29,40 +30,35 @@ vector<int> getNeighbors(int id, graph &g)
 
     return lst;
 }
-void exploreDFS(graph &g, bool &cyclic)
+void exploreDFS(int cur, graph &g, bool &cyclic)
 // implement a version of Depth First Search that uses a stack data structure
 // and does not use recursion
 {
-    stack<int> st;
-    st.push(0);
-
-    while (!st.empty())
+    
+    int top = cur;
+    g.mark(top);
+    vector<int> lst = getNeighbors(top, g);
+    for (int i = 0; i < lst.size(); i++)
     {
-        int top = st.top();
-
-        st.pop();
-        g.visit(top);
-        vector<int> lst = getNeighbors(top, g);
-        for (int i = 0; i < lst.size(); i++)
-        {
-            if (!g.isVisited(lst[i]))
-            {
-                st.push(lst[i]);
-            }
-            else
-            {
-                cyclic = true;
-            }
-        }
-
+	if (g.isMarked(lst[i]))
+	{
+	    cyclic = true;
+	}
+	else if (!g.isVisited(lst[i]))
+	{
+	    exploreDFS(lst[i], g, cyclic);
+	    if (cyclic) return;
+	}
     }
+    g.unMark(top);
+    g.visit(top);
 }
 
 bool isCyclic(graph &g)
 // Returns true if the graph g contains a cycle.  Otherwise, returns false.
 {
     bool cyclic = false;
-    exploreDFS( g, cyclic);
+    exploreDFS(0, g, cyclic);
     return cyclic;
 }
 bool isConnected(graph &g)
@@ -70,7 +66,7 @@ bool isConnected(graph &g)
 {
     g.clearVisit();
     bool c = false;
-    exploreDFS(g, c);
+    exploreDFS(0, g, c);
     for ( int i = 0; i < g.numNodes(); i++)
     {
         if(!g.isVisited(i))  
@@ -105,9 +101,7 @@ void findSpanningForest(graph &g, graph &sf)
                 }
             }       
         }        
-
     }
-
 }
 
 
