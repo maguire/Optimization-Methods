@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chemag-6a", "chemag-6a.vcproj", "{03769DDB-C30A-435F-83D2-F64A1F18C0C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03769DDB-C30A-435F-83D2-F64A1F18C0C9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{03769DDB-C30A-435F-83D2-F64A1F18C0C9}.Debug|Win32.Build.0 = Debug|Win32
+		{03769DDB-C30A-435F-83D2-F64A1F18C0C9}.Release|Win32.ActiveCfg = Release|Win32
+		{03769DDB-C30A-435F-83D2-F64A1F18C0C9}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
