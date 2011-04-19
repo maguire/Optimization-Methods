@@ -17,6 +17,15 @@ using namespace std;
 
 int const NONE = -1;  // Used to represent a node that does not exist
 
+class CompareEdge
+{
+public:
+    bool operator() (edge &e1, edge &e2)
+    {
+	return e2.getWeight() < e1.getWeight();
+    }
+};
+
 vector<int> getNeighbors(int id, graph &g)
 // get all neighbors of the node with given id in graph g
 {
@@ -129,13 +138,14 @@ void findSpanningForest(graph &g, graph &sf)
 
 void findSF(graph &g, graph &sf, int start)
 {
-    priority_queue<edge> pq;
+    priority_queue<edge, vector<edge>, CompareEdge> pq;
     vector<int> lst = getNeighbors(start, g);
     for (int i = 0; i < lst.size(); i++)
     {
 	pq.push(g.getEdge(start, lst[i]));
 	g.mark(start, lst[i]);
     }
+    g.visit(start);
 
     int src, dst, w;
     edge top;
@@ -159,6 +169,7 @@ void findSF(graph &g, graph &sf, int start)
 	    }
 	    else
 	    {
+		g.visit(src);
 		lst = getNeighbors(dst, g);
 		for (int i = 0; i < lst.size(); i++)
 		{
@@ -175,7 +186,18 @@ void findSF(graph &g, graph &sf, int start)
 
 void prim(graph &g, graph &sf)
 {
+    for (int i = 0; i < g.numNodes(); i++)
+    {
+	sf.addNode(g.getNode(i));
+    }
     
+    for (int i = 0; i < g.numNodes(); i++)
+    {
+	if (!g.isVisited(i))
+	{
+	    findSF(g, sf, i);
+	}
+    }
 }
 
 
@@ -233,7 +255,7 @@ int main()
 
       // Initialize an empty graph to contain the spanning forest
       graph sf;
-      findSpanningForest(g,sf);
+      prim(g,sf);
 
       cout << endl;
 
