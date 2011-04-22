@@ -1,4 +1,5 @@
-// Project 6
+// Project 6b Chemag - Patrick Maguire and Jie Chen
+// Solution for Prim's minimum spanning tree algorithm
 
 #include <iostream>
 #include <limits.h>
@@ -19,11 +20,13 @@ int const NONE = -1;  // Used to represent a node that does not exist
 
 class CompareEdge
 {
+
 public:
     bool operator() (edge &e1, edge &e2)
     {
-	return e2.getWeight() < e1.getWeight();
+	    return e2.getWeight() < e1.getWeight();
     }
+
 };
 
 vector<int> getNeighbors(int id, graph &g)
@@ -75,8 +78,8 @@ bool isCyclic(graph &g)
     bool cyclic = false;
     for (int i = 0; i < g.numNodes(); i++)
     {
-	if (!g.isVisited(i))
-	    exploreDFS(i, i, g, cyclic);
+        if (!g.isVisited(i))
+            exploreDFS(i, i, g, cyclic);
     }
 
     g.clearVisit();
@@ -109,13 +112,13 @@ void findSpanningForest(graph &g, graph &sf)
     }
     else
     {
-	// add all the nodes from g to sf
-	for (int i = 0; i < g.numNodes(); i++)
-	{
-	    sf.addNode(g.getNode(i));
-	}
+        // add all the nodes from g to sf
+        for (int i = 0; i < g.numNodes(); i++)
+        {
+            sf.addNode(g.getNode(i));
+        }
 
-	// build the sf
+        // build the sf
         for(int i = 0; i < g.numNodes(); i++)
         {
             for (int x = 0; x < g.numNodes(); x++)
@@ -123,27 +126,28 @@ void findSpanningForest(graph &g, graph &sf)
                 if (g.isEdge(i, x) && !sf.isEdge(i, x))
                 {
                     sf.addEdge(i, x, g.getEdgeWeight(i, x));
-		    sf.addEdge(x, i, g.getEdgeWeight(x, i));
+                    sf.addEdge(x, i, g.getEdgeWeight(x, i));
 
                     if(isCyclic(sf))
-		    {
-			sf.removeEdge(x,i);
+                    {
+                        sf.removeEdge(x,i);
                         sf.removeEdge(i,x);
-		    }
-		}
+                    }
+                }
             }       
         }        
     }
 }
 
 void findSF(graph &g, graph &sf, int start)
+//finds a minimum spanning tree in the connected given graph 
 {
     priority_queue<edge, vector<edge>, CompareEdge> pq;
     vector<int> lst = getNeighbors(start, g);
     for (int i = 0; i < lst.size(); i++)
     {
-	pq.push(g.getEdge(start, lst[i]));
-	g.mark(start, lst[i]);
+	    pq.push(g.getEdge(start, lst[i]));
+	    g.mark(start, lst[i]);
     }
     g.visit(start);
 
@@ -152,51 +156,52 @@ void findSF(graph &g, graph &sf, int start)
 
     while (!pq.empty())
     {
-	top = pq.top();
-	pq.pop();
-	src = top.getSource();
-	dst = top.getDest();
-	w = top.getWeight();
-	if (!sf.isEdge(src, dst))
-	{
-	    sf.addEdge(src, dst, w);
-	    sf.addEdge(dst, src, w);
-	    
-	    if (isCyclic(sf))
-	    {
-		sf.removeEdge(src, dst);
-		sf.removeEdge(dst, src);
-	    }
-	    else
-	    {
-		g.visit(src);
-		lst = getNeighbors(dst, g);
-		for (int i = 0; i < lst.size(); i++)
-		{
-		    if (!g.isMarked(dst, lst[i]))
-		    {
-			pq.push(g.getEdge(dst, lst[i]));
-			g.mark(dst, lst[i]);
-		    }
-		}
-	    }
-	}
+        top = pq.top();
+        pq.pop();
+        src = top.getSource();
+        dst = top.getDest();
+        w = top.getWeight();
+        if (!sf.isEdge(src, dst))
+        {
+            sf.addEdge(src, dst, w);
+            sf.addEdge(dst, src, w);
+            
+            if (isCyclic(sf))
+            {
+                sf.removeEdge(src, dst);
+                sf.removeEdge(dst, src);
+            }
+            else
+            {
+                g.visit(src);
+                lst = getNeighbors(dst, g);
+                for (int i = 0; i < lst.size(); i++)
+                {
+                    if (!g.isMarked(dst, lst[i]))
+                    {
+                        pq.push(g.getEdge(dst, lst[i]));
+                        g.mark(dst, lst[i]);
+                    }
+                }
+            }
+        }
     }
 }
 
 void prim(graph &g, graph &sf)
+//finds a minimum spanning forrest, including unconnected graphs
 {
     for (int i = 0; i < g.numNodes(); i++)
     {
-	sf.addNode(g.getNode(i));
+        sf.addNode(g.getNode(i));
     }
     
     for (int i = 0; i < g.numNodes(); i++)
     {
-	if (!g.isVisited(i))
-	{
-	    findSF(g, sf, i);
-	}
+        if (!g.isVisited(i))
+        {
+            findSF(g, sf, i);
+        }
     }
 }
 
@@ -213,7 +218,7 @@ int main()
    // Read the name of the graph from the keyboard or
    // hard code it here for testing.
    
-   fileName = "graph1.txt";
+   fileName = "graph4.txt";
 
    //   cout << "Enter filename" << endl;
    //   cin >> fileName;
@@ -254,15 +259,18 @@ int main()
       cout << "Finding spanning forest" << endl;
 
       // Initialize an empty graph to contain the spanning forest
+      graph fake;
+      findSpanningForest(g,fake);
+
       graph sf;
       prim(g,sf);
+        
 
       cout << endl;
 
       cout << sf;
 
-      cout << "Spanning forest weight: " << sf.getTotalEdgeWeight()/2 << endl;
-
+      
       connected = isConnected(sf);
       cyclic = isCyclic(sf);
 
@@ -277,6 +285,10 @@ int main()
 	 cout << "Graph does not contain a cycle" << endl;
 
       cout << endl;
+      cout << "Spanning forest weight: " << fake.getTotalEdgeWeight()/2 << endl;
+
+      cout << "Minimum Spanning forest weight: " << sf.getTotalEdgeWeight()/2 << endl;
+      cout << "Spanning forest difference : " << fake.getTotalEdgeWeight()/2 - sf.getTotalEdgeWeight()/2 << endl;
    }    
    catch (indexRangeError &ex) 
    { 
